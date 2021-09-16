@@ -1,33 +1,32 @@
 import turtle
-import random
 
-def drunken_up():
-    turtle.setheading(90)
-    turtle.forward(50)
+def move_turtle(degree, distance = 50):
+    turtle.setheading(degree)
+    turtle.forward(distance)
     turtle.stamp()
+
+def move_up():
+    move_turtle(90)
     
-def drunken_down():
-    turtle.setheading(270)
-    turtle.forward(50)
-    turtle.stamp()
+def move_down():
+    move_turtle(270)
 
-def drunken_left():
-    turtle.setheading(180)
-    turtle.forward(50)
-    turtle.stamp()
+def move_left():
+    move_turtle(180)
 
-def drunken_right():
-    turtle.setheading(0)
-    turtle.forward(50)
-    turtle.stamp()
+def move_right():
+    move_turtle(0)
 
 def restart():
     turtle.reset()
 
 turtle.shape('turtle')
-turtle.onkey(drunken_up,'w')
-turtle.onkey(drunken_left,'a')
-turtle.onkey(drunken_down,'s')
-turtle.onkey(drunken_right,'d')
+turtle.stamp()
+
+turtle.onkey(move_up,'w')
+turtle.onkey(move_left,'a')
+turtle.onkey(move_down,'s')
+turtle.onkey(move_right,'d')
 turtle.onkey(restart,'Escape')
 turtle.listen()
+turtle.mainloop()
