@@ -6,13 +6,20 @@ character = load_image('animation_sheet.png')
 
 
 running = True
+# 루프 컨트롤 변수
 x = 0
 frame = 0
 
 
 def handle_events():
-    # fill here
-    pass
+    global running
+    events = get_events()
+
+    for event in events:
+        if event.type == SDL_QUIT:
+            running = False
+        if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            running = False
 
 
 while x < 800 and running:
@@ -23,7 +30,7 @@ while x < 800 and running:
 
     handle_events()
     frame = (frame + 1) % 8
-    x += 5
+    x += 1
     delay(0.01)
 
 close_canvas()
