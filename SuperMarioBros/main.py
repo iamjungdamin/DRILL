@@ -2,9 +2,8 @@ from pico2d import *
 from cMario import *
 
 
-def handle_events():
+def handle_events(events):
     global gaming
-    events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             gaming = False
@@ -18,8 +17,9 @@ mario = Mario()
 gaming = True
 
 while gaming:
-    # handle_events()
-    mario.update()
+    events = get_events()
+    handle_events(events)
+    mario.update(events)
 
     clear_canvas()
     background.draw(800/2, 600/2)

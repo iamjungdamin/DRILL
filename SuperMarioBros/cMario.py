@@ -13,11 +13,10 @@ class Mario:
         self.trans = 0  # SMALL, BIG, FIRE
         self.state = 0  # IDLE, LEFT, RIGHT, JUMP, ATTACK
 
-    def update(self):
+    def update(self, events):
         # TODO: Animation
         # self.frame = (self.frame + 1) % 4
 
-        events = get_events()
         for e in events:
             if e.type == SDL_KEYDOWN:
                 if e.key == SDLK_LEFT:
