@@ -23,7 +23,7 @@ def check_collision(a, b):
         return False
     if a4 < b2 or a2 > b4:  # y축
         return False
-    print('Collision', a, b)
+    # print('Collision', a, b)
     return True
 
 
@@ -42,11 +42,17 @@ while gaming:
     mario.update()
     goomba.update()
 
-    if check_collision(mario, goomba):
-        if mario.trans == 2:
-            mario.trans = 1
-        # TODO: 3초간 무적
-        # TODO: cMario 안으로 수정
+    if not mario.invincibility:
+        if check_collision(mario, goomba):
+            if mario.trans == 2:
+                mario.trans = 1
+                mario.invincibility = True
+    if not mario.invincibility:
+        if check_collision(mario, goomba):
+            if mario.trans == 1:
+                mario.trans = 0
+                mario.invincibility = True
+    # TODO: cMario 안으로 수정
 
     clear_canvas()
     background.draw(800 / 2, 600 / 2)

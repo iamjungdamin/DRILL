@@ -12,6 +12,9 @@ class Mario:
         # TODO: enum으로 관리
         self.trans = 0  # SMALL, BIG, FIRE
         self.state = 0  # LEFT, IDLE, RIGHT, JUMP, ATTACK
+        self.invincibility = False
+        self.invincibility_frame = 0.0
+        self.alpha = 1.0
 
     def input(self, events):
         for e in events:
@@ -44,6 +47,15 @@ class Mario:
         if -1 <= self.state <= 1:
             self.xPos += self.state
 
+        if self.invincibility:
+            self.invincibility_frame += 0.01
+            self.alpha = 0.5
+            if self.invincibility_frame >= 3:
+                self.invincibility = False
+        else:
+            self.invincibility_frame = 0.0
+            self.alpha = 1.0
+
     def get_bb(self):
         if self.trans == 0:
             w, h = 26, 32
@@ -53,12 +65,19 @@ class Mario:
             return self.xPos - w/2, self.yPos - h/2 + 16, self.xPos + w/2, self.yPos + h/2 + 16
 
     def draw(self):
-        if self.trans == 0:
-            self.image[self.trans].clip_draw(420 + self.frame * 60, 0, 26, 32, self.xPos, self.yPos)
-        elif self.trans == 1:
-            self.image[self.trans].clip_draw(416 + self.frame * 60, 0, 32, 64, self.xPos, self.yPos + 16)
-        elif self.trans == 2:
-            self.image[self.trans].clip_draw(416 + self.frame * 56, 0, 32, 64, self.xPos, self.yPos + 16)
-            # TODO: 왼쪽 clip_composite_draw
-
+        if self.state == 0 or self.state == 1:
+            if self.trans == 0:
+                self.image[self.trans].clip_draw(420 + self.frame * 60, 0, 26, 32, self.xPos, self.yPos)
+            elif self.trans == 1:
+                self.image[self.trans].clip_draw(416 + self.frame * 60, 0, 32, 64, self.xPos, self.yPos + 16)
+            elif self.trans == 2:
+                self.image[self.trans].clip_draw(416 + self.frame * 56, 0, 32, 64, self.xPos, self.yPos + 16)
+        if self.state == -1:
+            if self.trans == 0:
+                self.image[self.trans].clip_composite_draw(420 + self.frame * 60, 0, 26, 32, 0, 'h', self.xPos, self.yPos, 26, 32)
+            elif self.trans == 1:
+                self.image[self.trans].clip_composite_draw(416 + self.frame * 60, 0, 32, 64, 0, 'h', self.xPos, self.yPos + 16, 32, 64)
+            elif self.trans == 2:
+                self.image[self.trans].clip_composite_draw(416 + self.frame * 56, 0, 32, 64, 0, 'h', self.xPos, self.yPos + 16, 32, 64)
+        self.image[self.trans].opacify(self.alpha)
 
