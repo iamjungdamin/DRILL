@@ -11,19 +11,17 @@ class Mario:
         self.frame = 0
         # TODO: enum으로 관리
         self.trans = 0  # SMALL, BIG, FIRE
-        self.state = 0  # IDLE, LEFT, RIGHT, JUMP, ATTACK
+        self.state = 0  # LEFT, IDLE, RIGHT, JUMP, ATTACK
 
-    def update(self, events):
-        # TODO: Animation
-        # self.frame = (self.frame + 1) % 4
-
+    def input(self, events):
         for e in events:
             if e.type == SDL_KEYDOWN:
                 if e.key == SDLK_LEFT:
-                    self.xPos -= 5
+                    self.state -= 1
                 elif e.key == SDLK_RIGHT:
-                    self.xPos += 5
-                # trans 확인용
+                    self.state += 1
+
+                # TODO: 변신 아이템, 몬스터와 충돌 시 변신
                 elif e.key == SDLK_0:
                     self.trans = 0
                 elif e.key == SDLK_1:
@@ -31,6 +29,26 @@ class Mario:
                 elif e.key == SDLK_2:
                     self.trans = 2
 
+            if e.type == SDL_KEYUP:
+                if e.key == SDLK_LEFT:
+                    self.state += 1
+                elif e.key == SDLK_RIGHT:
+                    self.state -= 1
+
+    def update(self):
+        if self.state == 0:
+            self.frame = 0
+        else:
+            self.frame = (self.frame + 1) % 4
+            # TODO: 왼쪽
+
+        if -1 <= self.state <= 1:
+            self.xPos += self.state
+
     def draw(self):
-        self.image[self.trans].clip_draw(405, 0, 58, 64, self.xPos, self.yPos)
+        if self.trans == 2:
+            self.image[self.trans].clip_draw(416 + self.frame * 56, 0, 32, 64, self.xPos, self.yPos)
+        else:
+            self.image[self.trans].clip_draw(416 + self.frame * 60, 0, 32, 64, self.xPos, self.yPos)
+            # 왼쪽: clip_composite_draw
 

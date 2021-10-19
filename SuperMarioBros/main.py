@@ -1,5 +1,6 @@
 from pico2d import *
 from cMario import *
+from cGoomba import *
 
 
 def handle_events(events):
@@ -12,17 +13,22 @@ def handle_events(events):
 
 
 open_canvas()
-background = load_image('Image/Background.png')
+background = load_image('Image/Background2.png')
 mario = Mario()
+goomba = Goomba()
 gaming = True
 
 while gaming:
     events = get_events()
     handle_events(events)
-    mario.update(events)
+    mario.input(events)
+
+    mario.update()
+    goomba.update()
 
     clear_canvas()
     background.draw(800/2, 600/2)
+    goomba.draw()
     mario.draw()
     update_canvas()
 
