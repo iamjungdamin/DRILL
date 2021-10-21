@@ -11,7 +11,9 @@ class Mario:
         self.frame = 0
         # TODO: enum으로 관리
         self.trans = 0  # SMALL, BIG, FIRE
-        self.state = 0  # LEFT, IDLE, RIGHT, JUMP, ATTACK
+        self.state = 0  # LEFT, IDLE, RIGHT
+        self.jumping = False
+        self.attacking = False
         self.invincibility = False
         self.invincibility_frame = 0.0
         self.alpha = 1.0
@@ -23,6 +25,8 @@ class Mario:
                     self.state -= 1
                 elif e.key == SDLK_RIGHT:
                     self.state += 1
+                elif e.key == SDLK_SPACE:
+                    self.jump()
 
                 # TODO: 변신 아이템, 몬스터와 충돌 시 변신
                 elif e.key == SDLK_0:
@@ -38,6 +42,12 @@ class Mario:
                 elif e.key == SDLK_RIGHT:
                     self.state -= 1
 
+    def jump(self):
+        self.jumping = True
+        while self.yPos <= 83 + 16 + 25 * 2:
+            self.yPos += 0.5
+        self.jumping = False
+
     def update(self):
         if self.state == 0:
             self.frame = 0
@@ -46,6 +56,9 @@ class Mario:
 
         if -1 <= self.state <= 1:
             self.xPos += self.state
+        if not self.jumping:
+            if self.yPos >= 83 + 16:
+                self.yPos -= 0.3
 
         if self.invincibility:
             self.invincibility_frame += 0.01
@@ -72,6 +85,7 @@ class Mario:
                 self.image[self.trans].clip_draw(416 + self.frame * 60, 0, 32, 64, self.xPos, self.yPos + 16)
             elif self.trans == 2:
                 self.image[self.trans].clip_draw(416 + self.frame * 56, 0, 32, 64, self.xPos, self.yPos + 16)
+            # 점프
         if self.state == -1:
             if self.trans == 0:
                 self.image[self.trans].clip_composite_draw(420 + self.frame * 60, 0, 26, 32, 0, 'h', self.xPos, self.yPos, 26, 32)
@@ -80,4 +94,5 @@ class Mario:
             elif self.trans == 2:
                 self.image[self.trans].clip_composite_draw(416 + self.frame * 56, 0, 32, 64, 0, 'h', self.xPos, self.yPos + 16, 32, 64)
         self.image[self.trans].opacify(self.alpha)
-
+        
+        

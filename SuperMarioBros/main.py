@@ -33,6 +33,7 @@ mario = Mario()
 goomba = Goomba()
 gaming = True
 boundingBox = True
+scrolling = 0
 
 while gaming:
     events = get_events()
@@ -42,26 +43,39 @@ while gaming:
     mario.update()
     goomba.update()
 
-    if not mario.invincibility:
+    if goomba.state == 0 and not mario.invincibility:
         if check_collision(mario, goomba):
-            if mario.trans == 2:
+            if mario.yPos > goomba.yPos:
+                goomba.state = 1
+            elif mario.trans == 2:
                 mario.trans = 1
                 mario.invincibility = True
-    if not mario.invincibility:
+    if goomba.state == 0 and not mario.invincibility:
         if check_collision(mario, goomba):
-            if mario.trans == 1:
-                mario.trans = 0
-                mario.invincibility = True
+            if mario.yPos > goomba.yPos:
+                goomba.state = 1
+            elif check_collision(mario, goomba):
+                if mario.trans == 1:
+                    mario.trans = 0
+                    mario.invincibility = True
     # TODO: cMario 안으로 수정
+    # TODO: 굼바 완전히 삭제
+
+    # if -1 <= mario.state <= 1:
+    #     scrolling += -mario.state
+    if scrolling >= 800:
+        scrolling = 0
 
     clear_canvas()
-    background.draw(800 / 2, 600 / 2)
+    background.draw(scrolling - 800 / 2, 600 / 2)
+    background.draw(scrolling + 800 / 2, 600 / 2)
     goomba.draw()
     mario.draw()
 
     if boundingBox:
         draw_rectangle(*mario.get_bb())
-        draw_rectangle(*goomba.get_bb())
+        if goomba.state == 0:
+            draw_rectangle(*goomba.get_bb())
 
     update_canvas()
 
