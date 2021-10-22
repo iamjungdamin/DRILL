@@ -42,6 +42,7 @@ while gaming:
 
     mario.update()
     goomba.update()
+    # TODO: 굼바 배열로
 
     if goomba.state == 0 and not mario.invincibility:
         if check_collision(mario, goomba):
