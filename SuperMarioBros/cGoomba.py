@@ -5,7 +5,7 @@ class Goomba:
     def __init__(self, x=700):
         self.image = load_image('Image/Goomba.png')
         self.xPos = x
-        self.yPos = 83 + 20
+        self.yPos = 83 + 16
         self.frame = 0
         self.state = 0  # IDLE, DIED
 
@@ -21,3 +21,4 @@ class Goomba:
         if self.state == 0:
             self.image.clip_draw(self.frame * 59, 0, 32, 32, self.xPos, self.yPos)
         # TODO: 밟힌 모습 1초간 draw
+
