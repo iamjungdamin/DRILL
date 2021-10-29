@@ -1,61 +1,65 @@
 import framework
 from pico2d import *
+import random
+
 import cMario
 import cGoomba
 
 name = "MainState"
 background = None
 mario = None
-goomba = None
+goombas = None
 boundingBox = True
 
 
 def enter():
-    global background, mario, goomba
+    global background, mario, goombas
     background = load_image('Image/background2.png')
     mario = cMario.Mario()
-    goomba = cGoomba.Goomba()
+    goombas = [cGoomba.Goomba(random.randint(100, 700)) for i in range(5)]
 
 
 def exit():
-    global background, mario, goomba
+    global background, mario, goombas
     del background
     del mario
-    del goomba
+    del goombas
 
 
 def update():
-    global mario, goomba
+    global mario, goombas
     mario.update()
-    goomba.update()
+    for goomba in goombas:
+        goomba.update()
+        if goomba.die_frame >= 1:
+            goomba.die_frame = 0.0
+            goombas.remove(goomba)
 
-    if goomba.state == 0 and not mario.invincibility:
-        if check_collision(mario, goomba):
-            if mario.yPos > goomba.yPos:
-                goomba.state = 1
-            else:
-                if mario.trans == 2:
-                    mario.trans = 1
+    for goomba in goombas:
+        if goomba.state == 0 and not mario.invincibility:
+            if mario.check_collision(goomba):
+                if mario.yPos > goomba.yPos:
+                    goomba.state = 1
+                else:
+                    if mario.trans > 0:
+                        mario.trans -= 1
+                        # TODO: Game Over
                     mario.invincibility = True
-                elif mario.trans == 1:
-                    mario.trans = 0
-                    mario.invincibility = True
-                elif mario.trans == 0:
-                    # TODO: Game Over
-                    pass
 
 
 def draw():
-    global background, mario, goomba
+    global background, mario, goombas
     global boundingBox
     clear_canvas()
-    background.draw(800 / 2, 600 / 2)
+    background.draw(800 // 2, 600 // 2)
     mario.draw()
-    goomba.draw()
+    for goomba in goombas:
+        goomba.draw()
 
     if boundingBox:
         draw_rectangle(*mario.get_bb())
-        draw_rectangle(*goomba.get_bb())
+        for goomba in goombas:
+            draw_rectangle(*goomba.get_bb())
 
     update_canvas()
 
@@ -78,15 +82,4 @@ def pause(): pass
 
 
 def resume(): pass
-
-
-def check_collision(a, b):
-    a1, a2, a3, a4 = a.get_bb()
-    b1, b2, b3, b4 = b.get_bb()
-
-    if a1 > b3 or a3 < b1:  # x축
-        return False
-    if a4 < b2 or a2 > b4:  # y축
-        return False
-    return True
 

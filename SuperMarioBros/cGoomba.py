@@ -8,10 +8,14 @@ class Goomba:
         self.yPos = 83 + 16
         self.frame = 0
         self.state = 0  # IDLE, DIED
+        self.die_frame = 0.0
 
     def update(self):
         self.frame = (self.frame + 1) % 2
         self.xPos -= 0.05
+
+        if self.state == 1:
+            self.die_frame += 0.01
 
     def get_bb(self):
         w, h = 32, 32
@@ -20,5 +24,5 @@ class Goomba:
     def draw(self):
         if self.state == 0:
             self.image.clip_draw(self.frame * 59, 0, 32, 32, self.xPos, self.yPos)
-        # TODO: 밟힌 모습 1초간 draw
-
+        if self.state == 1:
+            self.image.clip_draw(2 * 59, 0, 32, 32, self.xPos, self.yPos)

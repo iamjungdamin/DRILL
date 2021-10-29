@@ -64,9 +64,9 @@ class Mario:
             self.invincibility_frame += 0.01
             self.alpha = 0.5
             if self.invincibility_frame >= 3:
+                self.invincibility_frame = 0.0
                 self.invincibility = False
         else:
-            self.invincibility_frame = 0.0
             self.alpha = 1.0
 
     def get_bb(self):
@@ -85,7 +85,7 @@ class Mario:
                 self.image[self.trans].clip_draw(416 + self.frame * 60, 0, 32, 64, self.xPos, self.yPos + 16)
             elif self.trans == 2:
                 self.image[self.trans].clip_draw(416 + self.frame * 56, 0, 32, 64, self.xPos, self.yPos + 16)
-            # 점프
+            # TODO: 점프
         if self.state == -1:
             if self.trans == 0:
                 self.image[self.trans].clip_composite_draw(420 + self.frame * 60, 0, 26, 32, 0, 'h', self.xPos, self.yPos, 26, 32)
@@ -94,5 +94,14 @@ class Mario:
             elif self.trans == 2:
                 self.image[self.trans].clip_composite_draw(416 + self.frame * 56, 0, 32, 64, 0, 'h', self.xPos, self.yPos + 16, 32, 64)
         self.image[self.trans].opacify(self.alpha)
-        
-        
+
+    def check_collision(self, obj):
+        a1, a2, a3, a4 = self.get_bb()
+        b1, b2, b3, b4 = obj.get_bb()
+
+        if a1 > b3 or a3 < b1:  # x축
+            return False
+        if a4 < b2 or a2 > b4:  # y축
+            return False
+        return True
+

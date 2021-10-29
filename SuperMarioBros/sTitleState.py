@@ -22,7 +22,7 @@ def update(): pass
 def draw():
     global title
     clear_canvas()
-    title.draw(800 / 2, 600 / 2)
+    title.draw(800 // 2, 600 // 2)
     update_canvas()
 
 
