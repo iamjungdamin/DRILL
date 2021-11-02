@@ -12,19 +12,23 @@ class Mario:
         # TODO: enum으로 관리
         self.trans = 0  # SMALL, BIG, FIRE
         self.state = 0  # LEFT, IDLE, RIGHT
+        self.facingRight = True
         self.jumping = False
         self.attacking = False
         self.invincibility = False
         self.invincibility_frame = 0.0
         self.alpha = 1.0
+        self.gravity = 9.8
 
     def input(self, events):
         for e in events:
             if e.type == SDL_KEYDOWN:
                 if e.key == SDLK_LEFT:
                     self.state -= 1
+                    self.facingRight = False
                 elif e.key == SDLK_RIGHT:
                     self.state += 1
+                    self.facingRight = True
                 elif e.key == SDLK_SPACE:
                     self.jump()
 
@@ -39,19 +43,19 @@ class Mario:
             if e.type == SDL_KEYUP:
                 if e.key == SDLK_LEFT:
                     self.state += 1
+                    self.frame = 0
                 elif e.key == SDLK_RIGHT:
                     self.state -= 1
+                    self.frame = 0
 
     def jump(self):
         self.jumping = True
-        while self.yPos <= 83 + 16 + 25 * 2:
-            self.yPos += 0.5
+        # height = jumpTime * jumpTime * self.gravity / 2
+        # if self.check_collision():
         self.jumping = False
 
     def update(self):
-        if self.state == 0:
-            self.frame = 0
-        else:
+        if not self.state == 0:
             self.frame = (self.frame + 1) % 4
 
         if -1 <= self.state <= 1:
@@ -78,7 +82,7 @@ class Mario:
             return self.xPos - w/2, self.yPos - h/2 + 16, self.xPos + w/2, self.yPos + h/2 + 16
 
     def draw(self):
-        if self.state == 0 or self.state == 1:
+        if self.facingRight:
             if self.trans == 0:
                 self.image[self.trans].clip_draw(420 + self.frame * 60, 0, 26, 32, self.xPos, self.yPos)
             elif self.trans == 1:
@@ -86,7 +90,7 @@ class Mario:
             elif self.trans == 2:
                 self.image[self.trans].clip_draw(416 + self.frame * 56, 0, 32, 64, self.xPos, self.yPos + 16)
             # TODO: 점프
-        if self.state == -1:
+        else:
             if self.trans == 0:
                 self.image[self.trans].clip_composite_draw(420 + self.frame * 60, 0, 26, 32, 0, 'h', self.xPos, self.yPos, 26, 32)
             elif self.trans == 1:

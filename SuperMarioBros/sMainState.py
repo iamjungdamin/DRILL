@@ -2,6 +2,7 @@ import framework
 from pico2d import *
 import random
 
+import cStage
 import cMario
 import cGoomba
 
@@ -14,9 +15,9 @@ boundingBox = True
 
 def enter():
     global background, mario, goombas
-    background = load_image('Image/background2.png')
+    background = cStage.Stage()
     mario = cMario.Mario()
-    goombas = [cGoomba.Goomba(random.randint(100, 700)) for i in range(5)]
+    goombas = [cGoomba.Goomba(random.randint(100, 700)) for i in range(7)]
 
 
 def exit():
@@ -51,12 +52,13 @@ def draw():
     global background, mario, goombas
     global boundingBox
     clear_canvas()
-    background.draw(800 // 2, 600 // 2)
+    background.draw()
     mario.draw()
     for goomba in goombas:
         goomba.draw()
 
     if boundingBox:
+        draw_rectangle(*background.get_bb())
         draw_rectangle(*mario.get_bb())
         for goomba in goombas:
             draw_rectangle(*goomba.get_bb())
