@@ -6,6 +6,7 @@ class Stage:
         self.sky = load_image("Image/Stage-sky.png")
         self.ground = load_image("Image/Stage-ground.png")
         self.xPos, self.yPos = 800 // 2, 600 // 2
+        self.type = 'ground'
 
     def get_bb(self):
         w, h = 1986, 600

@@ -9,6 +9,7 @@ class Goomba:
         self.frame = 0
         self.state = 0  # IDLE, DIED
         self.die_frame = 0.0
+        self.type = 'enemy'
 
     def update(self):
         self.frame = (self.frame + 1) % 2

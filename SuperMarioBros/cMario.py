@@ -13,12 +13,14 @@ class Mario:
         self.trans = 0  # SMALL, BIG, FIRE
         self.state = 0  # LEFT, IDLE, RIGHT
         self.facingRight = True
+
         self.jumping = False
+        self.fall_speed = 0
+
         self.attacking = False
         self.invincibility = False
         self.invincibility_frame = 0.0
         self.alpha = 1.0
-        self.gravity = 9.8
 
     def input(self, events):
         for e in events:
@@ -50,19 +52,23 @@ class Mario:
 
     def jump(self):
         self.jumping = True
-        # height = jumpTime * jumpTime * self.gravity / 2
-        # if self.check_collision():
-        self.jumping = False
+        if self.trans == 2:
+            self.frame = 6
+        else:
+            self.frame = 5
+        self.fall_speed = 1
+        self.yPos += 50
 
     def update(self):
-        if not self.state == 0:
+        if self.state == -1 or self.state == 1:
             self.frame = (self.frame + 1) % 4
 
         if -1 <= self.state <= 1:
             self.xPos += self.state
-        if not self.jumping:
-            if self.yPos >= 83 + 16:
-                self.yPos -= 0.3
+        self.yPos -= self.fall_speed
+        if self.jumping and self.fall_speed == 0:
+            self.jumping = False
+            self.frame = 0
 
         if self.invincibility:
             self.invincibility_frame += 0.01
@@ -88,15 +94,14 @@ class Mario:
             elif self.trans == 1:
                 self.image[self.trans].clip_draw(416 + self.frame * 60, 0, 32, 64, self.xPos, self.yPos + 16)
             elif self.trans == 2:
-                self.image[self.trans].clip_draw(416 + self.frame * 56, 0, 32, 64, self.xPos, self.yPos + 16)
-            # TODO: 점프
+                self.image[self.trans].clip_draw(416 + self.frame * 51, 0, 32, 64, self.xPos, self.yPos + 16)
         else:
             if self.trans == 0:
                 self.image[self.trans].clip_composite_draw(420 + self.frame * 60, 0, 26, 32, 0, 'h', self.xPos, self.yPos, 26, 32)
             elif self.trans == 1:
                 self.image[self.trans].clip_composite_draw(416 + self.frame * 60, 0, 32, 64, 0, 'h', self.xPos, self.yPos + 16, 32, 64)
             elif self.trans == 2:
-                self.image[self.trans].clip_composite_draw(416 + self.frame * 56, 0, 32, 64, 0, 'h', self.xPos, self.yPos + 16, 32, 64)
+                self.image[self.trans].clip_composite_draw(416 + self.frame * 51, 0, 32, 64, 0, 'h', self.xPos, self.yPos + 16, 32, 64)
         self.image[self.trans].opacify(self.alpha)
 
     def check_collision(self, obj):
@@ -107,5 +112,10 @@ class Mario:
             return False
         if a4 < b2 or a2 > b4:  # y축
             return False
+
+        if obj.type == 'enemy':
+            self.jump()
+        elif obj.type == 'ground':
+            self.fall_speed = 0
         return True
 

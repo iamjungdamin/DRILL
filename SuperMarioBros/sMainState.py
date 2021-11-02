@@ -46,6 +46,7 @@ def update():
                         mario.trans -= 1
                         # TODO: Game Over
                     mario.invincibility = True
+    mario.check_collision(background)
 
 
 def draw():
