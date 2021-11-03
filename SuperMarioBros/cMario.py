@@ -52,23 +52,20 @@ class Mario:
 
     def jump(self):
         self.jumping = True
-        if self.trans == 2:
-            self.frame = 6
-        else:
-            self.frame = 5
-        self.fall_speed = 1
-        self.yPos += 50
+        self.fall_speed = -15
 
     def update(self):
         if self.state == -1 or self.state == 1:
             self.frame = (self.frame + 1) % 4
-
-        if -1 <= self.state <= 1:
             self.xPos += self.state
-        self.yPos -= self.fall_speed
-        if self.jumping and self.fall_speed == 0:
-            self.jumping = False
-            self.frame = 0
+        self.yPos += -1 * self.fall_speed
+        self.fall_speed += 1
+        delay(0.005)
+        if self.jumping:
+            if self.trans == 2:
+                self.frame = 6
+            else:
+                self.frame = 5
 
         if self.invincibility:
             self.invincibility_frame += 0.01
@@ -114,8 +111,11 @@ class Mario:
             return False
 
         if obj.type == 'enemy':
-            self.jump()
+            # self.jump()
+            pass
         elif obj.type == 'ground':
             self.fall_speed = 0
+            self.jumping = False
+            self.yPos = b4 + 16
         return True
 

@@ -17,7 +17,7 @@ def enter():
     global background, mario, goombas
     background = cStage.Stage()
     mario = cMario.Mario()
-    goombas = [cGoomba.Goomba(random.randint(100, 700)) for i in range(7)]
+    goombas = [cGoomba.Goomba(random.randint(600, 700)) for i in range(2)]
 
 
 def exit():
