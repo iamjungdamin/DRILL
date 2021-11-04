@@ -1,7 +1,7 @@
 from pico2d import *
 
 # Boy Event
-RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP = range(4)
+RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SLEEP_TIMER = range(5)
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_RIGHT): RIGHT_DOWN,
@@ -22,7 +22,7 @@ class IdleState:
             boy.velocity -= 1
         elif event == LEFT_UP:
             boy.velocity += 1
-        boy.timer = 1000
+        boy.timer = 500
 
     def exit(boy, event):
         pass
@@ -30,6 +30,8 @@ class IdleState:
     def do(boy):
         boy.frame = (boy.frame + 1) % 8
         boy.timer -= 1
+        if boy.timer == 0:
+            boy.add_event(SLEEP_TIMER)
 
     def draw(boy):
         if boy.dir == 1:
@@ -66,11 +68,33 @@ class RunState:
             boy.image.clip_draw(boy.frame * 100, 0, 100, 100, boy.x, boy.y)
 
 
+class SleepState:
+    def enter(boy, event):
+        boy.frame = 0
+
+    def exit(boy, event):
+        pass
+
+    def do(boy):
+        boy.frame = (boy.frame + 1) % 8
+
+    def draw(boy):
+        if boy.dir == 1:
+            boy.image.clip_composite_draw(boy.frame * 100, 300, 100, 100,
+                                          3.141592 / 2, '', boy.x - 25, boy.y - 25, 100, 100)
+        else:
+            boy.image.clip_composite_draw(boy.frame * 100, 200, 100, 100,
+                                          -3.141592 / 2, '', boy.x + 25, boy.y - 25, 100, 100)
+
+
 next_state_table = {
     IdleState: {RIGHT_UP: RunState, LEFT_UP: RunState,
-                RIGHT_DOWN: RunState, LEFT_DOWN: RunState},
+                RIGHT_DOWN: RunState, LEFT_DOWN: RunState,
+                SLEEP_TIMER: SleepState},
     RunState: {RIGHT_UP: IdleState, LEFT_UP: IdleState,
-               LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState}
+               LEFT_DOWN: IdleState, RIGHT_DOWN: IdleState},
+    SleepState: {LEFT_DOWN: RunState, RIGHT_DOWN: RunState,
+                 LEFT_UP: RunState, RIGHT_UP: RunState}
 }
 
 
@@ -84,7 +108,7 @@ class Boy:
         self.frame = 0
         self.timer = 0
         self.event_que = []
-        self.cur_state = IdleState
+        self.cur_state = SleepState
         self.cur_state.enter(self, None)
 
     def change_state(self,  state):
@@ -104,6 +128,7 @@ class Boy:
 
     def draw(self):
         self.cur_state.draw(self)
+        debug_print('Velocity: ' + str(self.velocity) + ', Dir: ' + str(self.dir))
 
     def handle_event(self, event):
         if (event.type, event.key) in key_event_table:
