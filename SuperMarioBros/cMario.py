@@ -30,7 +30,7 @@ class IdleState:
         pass
 
     def draw(mario):
-        if mario.state == 1:    # facing right
+        if mario.dir == 1:    # facing right
             if mario.trans == 0:
                 mario.image[mario.trans].clip_draw(420 + mario.frame * 60, 0, 26, 32, mario.xPos, mario.yPos)
             elif mario.trans == 1:
@@ -60,7 +60,7 @@ class RunState:
             mario.velocity -= 1
         elif event == LEFT_UP:
             mario.velocity += 1
-        mario.state = mario.velocity
+        mario.dir = mario.velocity
 
     def exit(mario, event):
         pass
@@ -105,7 +105,7 @@ class Mario:
         self.yPos = 83 + 16
         self.frame = 0
         self.trans = 0  # SMALL, BIG, FIRE
-        self.state = 0  # LEFT, IDLE, RIGHT
+        self.dir = 1
         self.velocity = 0
 
         self.jumping = False
@@ -136,6 +136,11 @@ class Mario:
                     self.trans = 1
                 elif e.key == SDLK_2:
                     self.trans = 2
+
+    def handle_event(self, event):
+        if (event.type, event.key) in key_event_table:
+            key_event = key_event_table[(event.type, event.key)]
+            self.add_event(key_event)
 
     def jump(self):
         self.jumping = True
@@ -177,12 +182,7 @@ class Mario:
 
     def draw(self):
         self.cur_state.draw(self)
-        debug_print('Velocity :' + str(self.velocity) + '  Dir:' + str(self.state))
-
-    def handle_event(self, event):
-        if (event.type, event.key) in key_event_table:
-            key_event = key_event_table[(event.type, event.key)]
-            self.add_event(key_event)
+        debug_print('V:' + str(self.velocity) + '  D:' + str(self.dir) + ' S:' + str(self.cur_state.__name__))
 
     def check_collision(self, obj):
         a1, a2, a3, a4 = self.get_bb()

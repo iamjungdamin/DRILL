@@ -28,7 +28,7 @@ def exit():
 
 
 def update():
-    global mario, goombas
+    # global mario, goombas
     mario.update()
     for goomba in goombas:
         goomba.update()
@@ -50,7 +50,7 @@ def update():
 
 
 def draw():
-    global background, mario, goombas
+    # global background, mario, goombas
     global boundingBox
     clear_canvas()
     background.draw()
@@ -73,11 +73,10 @@ def handle_events():
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
-        elif event.type == SDL_KEYDOWN:
-            if event.key == SDLK_ESCAPE:
-                game_framework.quit()
-            if event.key == SDLK_q:
-                boundingBox = not boundingBox
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_b:
+            boundingBox = not boundingBox
         else:
             mario.input(events)
             mario.handle_event(event)
