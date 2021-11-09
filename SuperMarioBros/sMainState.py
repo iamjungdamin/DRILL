@@ -1,4 +1,4 @@
-import framework
+import game_framework
 from pico2d import *
 import random
 
@@ -72,13 +72,15 @@ def handle_events():
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
-            framework.quit()
+            game_framework.quit()
         elif event.type == SDL_KEYDOWN:
             if event.key == SDLK_ESCAPE:
-                framework.quit()
+                game_framework.quit()
             if event.key == SDLK_q:
                 boundingBox = not boundingBox
-    mario.input(events)
+        else:
+            mario.input(events)
+            mario.handle_event(event)
 
 
 def pause(): pass
