@@ -5,30 +5,33 @@ import random
 import cStage
 import cMario
 import cGoomba
+import cBlock
 
 name = "MainState"
 background = None
 mario = None
 goombas = None
+blocks = None
 boundingBox = True
 
 
 def enter():
-    global background, mario, goombas
+    global background, mario, goombas, blocks
     background = cStage.Stage()
     mario = cMario.Mario()
     goombas = [cGoomba.Goomba(random.randint(600, 700)) for i in range(2)]
+    blocks = [cBlock.Block(200, 300)]
 
 
 def exit():
-    global background, mario, goombas
+    global background, mario, goombas, blocks
     del background
     del mario
     del goombas
+    del blocks
 
 
 def update():
-    # global mario, goombas
     mario.update()
     for goomba in goombas:
         goomba.update()
@@ -50,19 +53,22 @@ def update():
 
 
 def draw():
-    # global background, mario, goombas
     global boundingBox
     clear_canvas()
     background.draw()
     mario.draw()
     for goomba in goombas:
         goomba.draw()
+    for block in blocks:
+        block.draw()
 
     if boundingBox:
         draw_rectangle(*background.get_bb())
         draw_rectangle(*mario.get_bb())
         for goomba in goombas:
             draw_rectangle(*goomba.get_bb())
+        for block in blocks:
+            draw_rectangle(*block.get_bb())
 
     update_canvas()
 
