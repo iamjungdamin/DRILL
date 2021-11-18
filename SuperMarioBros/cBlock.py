@@ -12,9 +12,10 @@ class Block:
         pass
 
     def get_bb(self):
-        w, h = 160, 160  # TODO: size
+        w, h = 40, 40
         # TODO: 윗부분은 ground 아랫부분은 block
         return self.xPos - w / 2, self.yPos - h / 2, self.xPos + w / 2, self.yPos + h / 2
 
     def draw(self):
-        self.image.draw(self.xPos, self.yPos)
+        self.image.draw(self.xPos, self.yPos, 40, 40)
+        draw_rectangle(*self.get_bb())
