@@ -22,7 +22,7 @@ def enter():
     mario = cMario.Mario()
     goombas = [cEnemy.Goomba(random.randint(500, 600)) for i in range(1)]
     turtles = [cEnemy.Turtle(random.randint(600, 700)) for i in range(1)]
-    blocks = [cBlock.Block(200, 250)]
+    blocks = [cBlock.ItemBlock(200, 250), cBlock.BrickBlock(170, 250)]
 
     game_world.add_object(background, 0)
     game_world.add_object(mario, 1)
@@ -42,6 +42,9 @@ def update():
     for goomba in goombas:
         if goomba.die_frame >= 1:
             game_world.remove_object(goomba)
+    for turtle in turtles:
+        if turtle.die_frame >= 1:
+            game_world.remove_object(turtle)
 
     for goomba in goombas:
         if goomba.state == 0 and not mario.invincibility:
@@ -57,7 +60,7 @@ def update():
         if turtle.state == 0 and not mario.invincibility:
             if mario.check_collision(turtle):
                 if mario.yPos > turtle.yPos:
-                    goomba.state = 1
+                    turtle.state = 1
                 else:
                     if mario.trans > 0:
                         mario.trans -= 1
