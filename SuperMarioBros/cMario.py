@@ -2,6 +2,18 @@ from pico2d import *
 import game_framework
 
 
+PIXEL_PER_METER = (30.0 / 0.3)  # 30 pixel 30 cm
+RUN_SPEED_KMPH = 3.0
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+
+TIME_PER_ACTION = 0.3
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 4
+
+
 RIGHT_DOWN, LEFT_DOWN, RIGHT_UP, LEFT_UP, SPACE, FALL, CTRL, TIMER = range(8)
 
 key_event_table = {
@@ -17,13 +29,13 @@ key_event_table = {
 class IdleState:
     def enter(mario, event):
         if event == RIGHT_DOWN:
-            mario.velocity += 1
+            mario.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
-            mario.velocity -= 1
+            mario.velocity -= RUN_SPEED_PPS
         elif event == RIGHT_UP:
-            mario.velocity -= 1
+            mario.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
-            mario.velocity += 1
+            mario.velocity += RUN_SPEED_PPS
         mario.frame = 0
 
     def exit(mario, event):
@@ -56,39 +68,39 @@ class IdleState:
 class RunState:
     def enter(mario, event):
         if event == RIGHT_DOWN:
-            mario.velocity += 1
+            mario.velocity += RUN_SPEED_PPS
         elif event == LEFT_DOWN:
-            mario.velocity -= 1
+            mario.velocity -= RUN_SPEED_PPS
         elif event == RIGHT_UP:
-            mario.velocity -= 1
+            mario.velocity -= RUN_SPEED_PPS
         elif event == LEFT_UP:
-            mario.velocity += 1
-        mario.dir = mario.velocity
+            mario.velocity += RUN_SPEED_PPS
+        mario.dir = clamp(-1, mario.velocity, 1)
 
     def exit(mario, event):
         pass
 
     def do(mario):
-        mario.frame = (mario.frame + 1) % 4
-        mario.xPos += mario.velocity
+        mario.frame = (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
+        mario.xPos += mario.velocity * game_framework.frame_time
 
     def draw(mario):
-        if mario.velocity == 1:
+        if mario.dir == 1:
             if mario.trans == 0:
-                mario.image[mario.trans].clip_draw(420 + mario.frame * 60, 0, 26, 32, mario.xPos, mario.yPos)
+                mario.image[mario.trans].clip_draw(420 + int(mario.frame) * 60, 0, 26, 32, mario.xPos, mario.yPos)
             elif mario.trans == 1:
-                mario.image[mario.trans].clip_draw(416 + mario.frame * 60, 0, 32, 64, mario.xPos, mario.yPos + 16)
+                mario.image[mario.trans].clip_draw(416 + int(mario.frame) * 60, 0, 32, 64, mario.xPos, mario.yPos + 16)
             elif mario.trans == 2:
-                mario.image[mario.trans].clip_draw(416 + mario.frame * 51, 0, 32, 64, mario.xPos, mario.yPos + 16)
+                mario.image[mario.trans].clip_draw(416 + int(mario.frame) * 51, 0, 32, 64, mario.xPos, mario.yPos + 16)
         else:
             if mario.trans == 0:
-                mario.image[mario.trans].clip_composite_draw(420 + mario.frame * 60, 0, 26, 32, 0, 'h',
+                mario.image[mario.trans].clip_composite_draw(420 + int(mario.frame) * 60, 0, 26, 32, 0, 'h',
                                                              mario.xPos, mario.yPos, 26, 32)
             elif mario.trans == 1:
-                mario.image[mario.trans].clip_composite_draw(416 + mario.frame * 60, 0, 32, 64, 0, 'h',
+                mario.image[mario.trans].clip_composite_draw(416 + int(mario.frame) * 60, 0, 32, 64, 0, 'h',
                                                              mario.xPos, mario.yPos + 16, 32, 64)
             elif mario.trans == 2:
-                mario.image[mario.trans].clip_composite_draw(416 + mario.frame * 51, 0, 32, 64, 0, 'h',
+                mario.image[mario.trans].clip_composite_draw(416 + int(mario.frame) * 51, 0, 32, 64, 0, 'h',
                                                              mario.xPos, mario.yPos + 16, 32, 64)
         mario.image[mario.trans].opacify(mario.alpha)
 

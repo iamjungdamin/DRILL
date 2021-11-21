@@ -1,4 +1,17 @@
 from pico2d import *
+import game_framework
+
+
+PIXEL_PER_METER = (30.0 / 0.3)  # 30 pixel 30 cm
+RUN_SPEED_KMPH = 0.5
+RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
+
+
+TIME_PER_ACTION = 0.3
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 2
 
 
 class Goomba:
@@ -7,13 +20,14 @@ class Goomba:
         self.xPos = x
         self.yPos = 83 + 16
         self.frame = 0
+        self.dir = -1
         self.state = 0  # IDLE, DIED
         self.die_frame = 0.0
         self.type = 'enemy'
 
     def update(self):
-        self.frame = (self.frame + 1) % 2
-        self.xPos -= 0.05
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
+        self.xPos += self.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         if self.state == 1:
             self.die_frame += 0.01
@@ -24,8 +38,8 @@ class Goomba:
 
     def draw(self):
         if self.state == 0:
-            self.image.clip_draw(self.frame * 59, 0, 32, 32, self.xPos, self.yPos)
-        elif self.state == 1:
+            self.image.clip_draw(int(self.frame) * 59, 0, 32, 32, self.xPos, self.yPos)
+        else:
             self.image.clip_draw(2 * 59, 0, 32, 32, self.xPos, self.yPos)
         draw_rectangle(*self.get_bb())
 
@@ -36,14 +50,14 @@ class Turtle:
         self.xPos = x
         self.yPos = 83 + 24
         self.frame = 0
+        self.dir = -1
         self.state = 0  # IDLE, DIED
-        # TODO: DIED sprite
         self.die_frame = 0.0
         self.type = 'enemy'
 
     def update(self):
-        self.frame = (self.frame + 1) % 2
-        self.xPos -= 0.05
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
+        self.xPos += self.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         if self.state == 1:
             self.die_frame += 0.01
@@ -54,7 +68,11 @@ class Turtle:
 
     def draw(self):
         if self.state == 0:
-            self.image.clip_draw(self.frame * 59, 0, 32, 48, self.xPos, self.yPos)
-        elif self.state == 1:
+            if self.dir == -1:
+                self.image.clip_draw(int(self.frame) * 59, 0, 32, 48, self.xPos, self.yPos)
+            else:
+                self.image.clip_composite_draw(int(self.frame) * 59, 0, 32, 48, 0, 'h', self.xPos, self.yPos, 32, 48)
+        else:
             self.image.clip_draw(2 * 59, 0, 32, 48, self.xPos, self.yPos)
         draw_rectangle(*self.get_bb())
+
