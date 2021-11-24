@@ -20,8 +20,8 @@ def enter():
     global background, mario, goombas, turtles, blocks
     background = cStage.Stage()
     mario = cMario.Mario()
-    goombas = [cEnemy.Goomba(random.randint(500, 600)) for i in range(1)]
-    turtles = [cEnemy.Turtle(random.randint(600, 700)) for i in range(1)]
+    goombas = [cEnemy.Goomba(random.randint(400, 700)) for i in range(2)]
+    turtles = [cEnemy.Turtle(random.randint(400, 700)) for i in range(3)]
     blocks = [cBlock.ItemBlock(200, 250), cBlock.BrickBlock(170, 250)]
 
     game_world.add_object(background, 0)

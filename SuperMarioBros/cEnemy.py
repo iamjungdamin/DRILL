@@ -26,10 +26,10 @@ class Goomba:
         self.type = 'enemy'
 
     def update(self):
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
-        self.xPos += self.dir * RUN_SPEED_PPS * game_framework.frame_time
-
-        if self.state == 1:
+        if self.state == 0:
+            self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
+            self.xPos += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+        else:
             self.die_frame += 0.01
 
     def get_bb(self):
@@ -56,10 +56,10 @@ class Turtle:
         self.type = 'enemy'
 
     def update(self):
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
-        self.xPos += self.dir * RUN_SPEED_PPS * game_framework.frame_time
-
-        if self.state == 1:
+        if self.state == 0:
+            self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
+            self.xPos += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+        else:
             self.die_frame += 0.01
 
     def get_bb(self):
