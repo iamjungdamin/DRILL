@@ -5,14 +5,20 @@ from pico2d import *
 import game_framework
 import game_world
 
+import server
+import collision
+
 
 class Brick:
+
+    BOY_X0, BOY_Y0 = -50, 60
 
     def __init__(self, center=300, y=100):
         self.image = load_image('brick180x40.png')
         self.left_wall, self.right_wall = center - 100, center + 100
         self.x, self.y = center, y
         self.speed = random.randint(100,250) * random.choice([-1,1])
+        # self.speed = 0
 
     def update(self):
         self.x += game_framework.frame_time * self.speed
@@ -22,6 +28,9 @@ class Brick:
         if self.x <= self.left_wall:
             self.speed = random.randint(100,250) * random.choice([-1,1])
             self.x = self.left_wall
+
+        # if collision.collide(self, server.boy):
+        #     server.boy.set_parent(self)
 
     def draw(self):
         self.image.draw(self.x, self.y)
