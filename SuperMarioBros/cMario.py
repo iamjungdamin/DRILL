@@ -1,5 +1,7 @@
 from pico2d import *
 import game_framework
+import server
+import collision
 
 
 PIXEL_PER_METER = (30.0 / 0.3)  # 30 pixel 30 cm
@@ -143,6 +145,24 @@ class Mario:
         else:
             self.alpha = 1.0
 
+        for enemy in server.enemies:
+            if enemy.state == 0 and not self.invincibility:
+                if collision.check_collision(self, enemy):
+                    if self.yPos > enemy.yPos:
+                        enemy.state = 1
+                        self.jump()
+                        # break
+                    else:
+                        if self.trans > 0:
+                            self.trans -= 1
+                            # TODO: Game Over
+                        self.invincibility = True
+                        break
+        if collision.check_collision(self, server.background):
+            self.fall_speed = 0
+            self.yPos = server.background.yPos - 300 + 83 + 16
+
+
     def jump(self):
         self.frame = 5
         if self.trans == 2:
@@ -185,20 +205,4 @@ class Mario:
 
         draw_rectangle(*self.get_bb())
         debug_print('V:' + str(self.velocity) + '  D:' + str(self.dir) + ' S:' + str(self.cur_state.__name__))
-
-    def check_collision(self, obj):
-        a1, a2, a3, a4 = self.get_bb()
-        b1, b2, b3, b4 = obj.get_bb()
-
-        if a1 > b3 or a3 < b1:  # x축
-            return False
-        if a4 < b2 or a2 > b4:  # y축
-            return False
-
-        if obj.type == 'enemy':
-            self.jump()
-        elif obj.type == 'ground':
-            self.fall_speed = 0
-            self.yPos = b4 + 16
-        return True
 

@@ -53,7 +53,6 @@ class Turtle:
         self.dir = -1
         self.state = 0  # IDLE, DIED
         self.die_frame = 0.0
-        self.type = 'enemy'
 
     def update(self):
         if self.state == 0:

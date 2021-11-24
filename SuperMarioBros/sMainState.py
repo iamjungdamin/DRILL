@@ -1,6 +1,9 @@
+from pico2d import *
 import game_framework
 import game_world
-from pico2d import *
+import server
+import collision
+
 import random
 
 import cStage
@@ -9,26 +12,19 @@ import cEnemy
 import cBlock
 
 name = "MainState"
-background = None
-mario = None
-goombas = None
-turtles = None
-blocks = None
 
 
 def enter():
-    global background, mario, goombas, turtles, blocks
-    background = cStage.Stage()
-    mario = cMario.Mario()
-    goombas = [cEnemy.Goomba(random.randint(400, 700)) for i in range(2)]
-    turtles = [cEnemy.Turtle(random.randint(400, 700)) for i in range(3)]
-    blocks = [cBlock.ItemBlock(200, 250), cBlock.BrickBlock(170, 250)]
+    server.background = cStage.Stage()
+    server.mario = cMario.Mario()
+    server.enemies = [cEnemy.Goomba(random.randint(400, 700)) for i in range(2)]
+    server.enemies += [cEnemy.Turtle(random.randint(400, 700)) for i in range(3)]
+    server.blocks = [cBlock.ItemBlock(200, 250), cBlock.BrickBlock(170, 250)]
 
-    game_world.add_object(background, 0)
-    game_world.add_object(mario, 1)
-    game_world.add_objects(goombas, 1)
-    game_world.add_objects(turtles, 1)
-    game_world.add_objects(blocks, 0)
+    game_world.add_object(server.background, 0)
+    game_world.add_object(server.mario, 1)
+    game_world.add_objects(server.enemies, 1)
+    game_world.add_objects(server.blocks, 0)
 
 
 def exit():
@@ -39,34 +35,9 @@ def update():
     for game_object in game_world.all_objects():
         game_object.update()
 
-    for goomba in goombas:
-        if goomba.die_frame >= 1:
-            game_world.remove_object(goomba)
-    for turtle in turtles:
-        if turtle.die_frame >= 1:
-            game_world.remove_object(turtle)
-
-    for goomba in goombas:
-        if goomba.state == 0 and not mario.invincibility:
-            if mario.check_collision(goomba):
-                if mario.yPos > goomba.yPos:
-                    goomba.state = 1
-                else:
-                    if mario.trans > 0:
-                        mario.trans -= 1
-                        # TODO: Game Over
-                    mario.invincibility = True
-    for turtle in turtles:
-        if turtle.state == 0 and not mario.invincibility:
-            if mario.check_collision(turtle):
-                if mario.yPos > turtle.yPos:
-                    turtle.state = 1
-                else:
-                    if mario.trans > 0:
-                        mario.trans -= 1
-                        # TODO: Game Over
-                    mario.invincibility = True
-    mario.check_collision(background)
+    for enemy in server.enemies:
+        if enemy.die_frame >= 1:
+            game_world.remove_object(enemy)
 
 
 def draw():
@@ -84,7 +55,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         else:
-            mario.handle_event(event)
+            server.mario.handle_event(event)
 
 
 def pause(): pass
