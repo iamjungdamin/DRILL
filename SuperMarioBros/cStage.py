@@ -10,7 +10,7 @@ class Stage:
     def update(self):
         pass
 
-    def get_bb(self):
+    def get_bb(self, bb_type=0):
         w, h = 1986, 600
         return self.xPos - w//2, self.yPos - h//2, self.xPos + w//2, self.yPos - h//2 + 83
 

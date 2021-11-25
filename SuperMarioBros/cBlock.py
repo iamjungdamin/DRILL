@@ -15,7 +15,8 @@ class ItemBlock:
         self.frame = 0
 
     def update(self):
-        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        if not self.frame == 3:
+            self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
 
     def get_bb(self, bb_type=0):
         # 0 ground, 1 block
@@ -29,7 +30,6 @@ class ItemBlock:
         self.image.clip_draw(int(self.frame) * 56, 0, 30, 30, self.xPos, self.yPos)
         draw_rectangle(*self.get_bb(0))
         draw_rectangle(*self.get_bb(1))
-        # TODO: 블록 밟기 처리, 블록 깨기 처리
 
 
 class BrickBlock:

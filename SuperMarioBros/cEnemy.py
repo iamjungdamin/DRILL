@@ -32,7 +32,7 @@ class Goomba:
         else:
             self.die_frame += 0.01
 
-    def get_bb(self):
+    def get_bb(self, bb_type=0):
         w, h = 32, 32
         return self.xPos - w / 2, self.yPos - h / 2, self.xPos + w / 2, self.yPos + h / 2
 
@@ -61,7 +61,7 @@ class Turtle:
         else:
             self.die_frame += 0.01
 
-    def get_bb(self):
+    def get_bb(self, bb_type=0):
         w, h = 32, 48
         return self.xPos - w / 2, self.yPos - h / 2, self.xPos + w / 2, self.yPos + h / 2
 

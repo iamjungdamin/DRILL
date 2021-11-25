@@ -19,12 +19,14 @@ def enter():
     server.mario = cMario.Mario()
     server.enemies = [cEnemy.Goomba(random.randint(400, 700)) for i in range(2)]
     server.enemies += [cEnemy.Turtle(random.randint(400, 700)) for i in range(3)]
-    server.blocks = [cBlock.ItemBlock(200, 250), cBlock.BrickBlock(170, 250)]
+    server.itemBlocks = [cBlock.ItemBlock(15 + 6 * 30, 180)]
+    server.brickBlocks = [cBlock.BrickBlock(15 + 7 * 30, 180)]
 
     game_world.add_object(server.background, 0)
     game_world.add_object(server.mario, 1)
     game_world.add_objects(server.enemies, 1)
-    game_world.add_objects(server.blocks, 0)
+    game_world.add_objects(server.itemBlocks, 0)
+    game_world.add_objects(server.brickBlocks, 0)
 
 
 def exit():
@@ -37,6 +39,7 @@ def update():
 
     for enemy in server.enemies:
         if enemy.die_frame >= 1:
+            server.enemies.remove(enemy)
             game_world.remove_object(enemy)
 
 

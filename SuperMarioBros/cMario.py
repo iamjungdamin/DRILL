@@ -1,5 +1,6 @@
 from pico2d import *
 import game_framework
+import game_world
 import server
 import collision
 
@@ -158,9 +159,24 @@ class Mario:
                             # TODO: Game Over
                         self.invincibility = True
                         break
+
         if collision.check_collision(self, server.background):
             self.fall_speed = 0
             self.yPos = server.background.yPos - 300 + 83 + 16
+
+        for block in server.itemBlocks:
+            if collision.check_collision(self, block):
+                self.fall_speed = 0
+                self.yPos = block.yPos + 15 + 16
+            if collision.check_collision(self, block, 0, 1):
+                block.frame = 3
+        for block in server.brickBlocks:
+            if collision.check_collision(self, block):
+                self.fall_speed = 0
+                self.yPos = block.yPos + 15 + 16
+            if collision.check_collision(self, block, 0, 1):
+                server.brickBlocks.remove(block)
+                game_world.remove_object(block)
 
 
     def jump(self):
@@ -174,7 +190,7 @@ class Mario:
         self.frame = 4
         # TODO: 파이어볼
 
-    def get_bb(self):
+    def get_bb(self, bb_type=0):
         if self.trans == 0:
             w, h = 26, 32
             return self.xPos - w/2, self.yPos - h/2, self.xPos + w/2, self.yPos + h/2
