@@ -138,7 +138,7 @@ class Mario:
         delay(0.01)
 
         if self.invincibility:
-            self.invincibility_frame += 0.01
+            self.invincibility_frame += game_framework.frame_time
             self.alpha = 0.5
             if self.invincibility_frame >= 1:
                 self.invincibility_frame = 0.0
@@ -170,6 +170,8 @@ class Mario:
                 self.yPos = block.yPos + 15 + 16
             if collision.check_collision(self, block, 0, 1):
                 block.frame = 3
+                # self.fall_speed = 0
+                self.yPos = block.yPos - 15 - 16
         for block in server.brickBlocks:
             if collision.check_collision(self, block):
                 self.fall_speed = 0
@@ -177,7 +179,8 @@ class Mario:
             if collision.check_collision(self, block, 0, 1):
                 server.brickBlocks.remove(block)
                 game_world.remove_object(block)
-
+                # self.fall_speed = 0
+                self.yPos = block.yPos - 15 - 16
 
     def jump(self):
         self.frame = 5

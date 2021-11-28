@@ -19,8 +19,8 @@ def enter():
     server.mario = cMario.Mario()
     server.enemies = [cEnemy.Goomba(random.randint(400, 700)) for i in range(2)]
     server.enemies += [cEnemy.Turtle(random.randint(400, 700)) for i in range(3)]
-    server.itemBlocks = [cBlock.ItemBlock(15 + 6 * 30, 180)]
-    server.brickBlocks = [cBlock.BrickBlock(15 + 7 * 30, 180)]
+    server.itemBlocks = [cBlock.ItemBlock(15 + 6 * 30, 200)]
+    server.brickBlocks = [cBlock.BrickBlock(15 + 7 * 30, 200)]
 
     game_world.add_object(server.background, 0)
     game_world.add_object(server.mario, 1)

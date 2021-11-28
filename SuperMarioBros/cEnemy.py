@@ -30,7 +30,7 @@ class Goomba:
             self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
             self.xPos += self.dir * RUN_SPEED_PPS * game_framework.frame_time
         else:
-            self.die_frame += 0.01
+            self.die_frame += game_framework.frame_time
 
     def get_bb(self, bb_type=0):
         w, h = 32, 32
@@ -59,7 +59,7 @@ class Turtle:
             self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 2
             self.xPos += self.dir * RUN_SPEED_PPS * game_framework.frame_time
         else:
-            self.die_frame += 0.01
+            self.die_frame += game_framework.frame_time
 
     def get_bb(self, bb_type=0):
         w, h = 32, 48
