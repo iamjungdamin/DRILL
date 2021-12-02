@@ -8,8 +8,11 @@ FRAMES_PER_ACTION = 3
 
 
 class ItemBlock:
+    image = None
+
     def __init__(self, x, y):
-        self.image = load_image('Image/itemblock.png')
+        if ItemBlock.image == None:
+            ItemBlock.image = load_image('Image/itemblock.png')
         self.xPos = x
         self.yPos = y
         self.frame = 0
@@ -33,8 +36,11 @@ class ItemBlock:
 
 
 class BrickBlock:
+    image = None
+
     def __init__(self, x, y):
-        self.image = load_image('Image/Brickblock.png')
+        if BrickBlock.image == None:
+            BrickBlock.image = load_image('Image/Brickblock.png')
         self.xPos = x
         self.yPos = y
         self.frame = 0

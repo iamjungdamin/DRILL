@@ -133,6 +133,7 @@ class Mario:
             self.cur_state = next_state_table[self.cur_state][event]
             self.cur_state.enter(self, event)
 
+        self.cx = self.xPos - server.background.window_left
         self.yPos += -1 * self.fall_speed
         self.fall_speed += 1
         delay(0.01)
@@ -196,30 +197,30 @@ class Mario:
     def get_bb(self, bb_type=0):
         if self.trans == 0:
             w, h = 26, 32
-            return self.xPos - w/2, self.yPos - h/2, self.xPos + w/2, self.yPos + h/2
+            return self.cx- w/2, self.yPos - h/2, self.cx + w/2, self.yPos + h/2
         else:
             w, h = 32, 64
-            return self.xPos - w/2, self.yPos - h/2 + 16, self.xPos + w/2, self.yPos + h/2 + 16
+            return self.cx - w/2, self.yPos - h/2 + 16, self.cx + w/2, self.yPos + h/2 + 16
 
     def draw(self):
         # self.cur_state.draw(self)
         if self.dir == 1:
             if self.trans == 0:
-                self.image[self.trans].clip_draw(420 + int(self.frame) * 60, 0, 26, 32, self.xPos, self.yPos)
+                self.image[self.trans].clip_draw(420 + int(self.frame) * 60, 0, 26, 32, self.cx, self.yPos)
             elif self.trans == 1:
-                self.image[self.trans].clip_draw(416 + int(self.frame) * 60, 0, 32, 64, self.xPos, self.yPos + 16)
+                self.image[self.trans].clip_draw(416 + int(self.frame) * 60, 0, 32, 64, self.cx, self.yPos + 16)
             elif self.trans == 2:
-                self.image[self.trans].clip_draw(416 + int(self.frame) * 51, 0, 32, 64, self.xPos, self.yPos + 16)
+                self.image[self.trans].clip_draw(416 + int(self.frame) * 51, 0, 32, 64, self.cx, self.yPos + 16)
         else:
             if self.trans == 0:
                 self.image[self.trans].clip_composite_draw(420 + int(self.frame) * 60, 0, 26, 32, 0, 'h',
-                                                           self.xPos, self.yPos, 26, 32)
+                                                           self.cx, self.yPos, 26, 32)
             elif self.trans == 1:
                 self.image[self.trans].clip_composite_draw(416 + int(self.frame) * 60, 0, 32, 64, 0, 'h',
-                                                           self.xPos, self.yPos + 16, 32, 64)
+                                                           self.cx, self.yPos + 16, 32, 64)
             elif self.trans == 2:
                 self.image[self.trans].clip_composite_draw(416 + int(self.frame) * 51, 0, 32, 64, 0, 'h',
-                                                           self.xPos, self.yPos + 16, 32, 64)
+                                                           self.cx, self.yPos + 16, 32, 64)
         self.image[self.trans].opacify(self.alpha)
 
         draw_rectangle(*self.get_bb())

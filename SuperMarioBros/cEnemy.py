@@ -15,8 +15,11 @@ FRAMES_PER_ACTION = 2
 
 
 class Goomba:
+    image = None
+
     def __init__(self, x=700):
-        self.image = load_image('Image/Goomba.png')
+        if Goomba.image == None:
+            Goomba.image = load_image('Image/Goomba.png')
         self.xPos = x
         self.yPos = 83 + 16
         self.frame = 0
@@ -45,8 +48,11 @@ class Goomba:
 
 
 class Turtle:
+    image = None
+
     def __init__(self, x=700):
-        self.image = load_image('Image/Turtle.png')
+        if Turtle.image == None:
+            Turtle.image = load_image('Image/Turtle.png')
         self.xPos = x
         self.yPos = 83 + 24
         self.frame = 0
