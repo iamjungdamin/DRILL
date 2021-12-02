@@ -147,42 +147,6 @@ class Mario:
         else:
             self.alpha = 1.0
 
-        for enemy in server.enemies:
-            if enemy.state == 0 and not self.invincibility:
-                if collision.check_collision(self, enemy):
-                    if self.yPos > enemy.yPos:
-                        enemy.state = 1
-                        self.jump()
-                        # break
-                    else:
-                        if self.trans > 0:
-                            self.trans -= 1
-                            # TODO: Game Over
-                        self.invincibility = True
-                        break
-
-        if collision.check_collision(self, server.background):
-            self.fall_speed = 0
-            self.yPos = server.background.yPos - 300 + 83 + 16
-
-        for block in server.itemBlocks:
-            if collision.check_collision(self, block):
-                self.fall_speed = 0
-                self.yPos = block.yPos + 15 + 16
-            if collision.check_collision(self, block, 0, 1):
-                block.frame = 3
-                # self.fall_speed = 0
-                self.yPos = block.yPos - 15 - 16
-        for block in server.brickBlocks:
-            if collision.check_collision(self, block):
-                self.fall_speed = 0
-                self.yPos = block.yPos + 15 + 16
-            if collision.check_collision(self, block, 0, 1):
-                server.brickBlocks.remove(block)
-                game_world.remove_object(block)
-                # self.fall_speed = 0
-                self.yPos = block.yPos - 15 - 16
-
     def jump(self):
         self.frame = 5
         if self.trans == 2:

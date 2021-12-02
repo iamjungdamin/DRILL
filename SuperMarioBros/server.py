@@ -3,3 +3,4 @@ mario = None
 enemies = []
 itemBlocks = []
 brickBlocks = []
+floorBlocks = []

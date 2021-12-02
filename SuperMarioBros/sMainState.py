@@ -17,16 +17,19 @@ name = "MainState"
 def enter():
     server.background = cStage.Stage()
     server.mario = cMario.Mario()
-    server.enemies = [cEnemy.Goomba(random.randint(400, 700)) for i in range(2)]
-    server.enemies += [cEnemy.Turtle(random.randint(400, 700)) for i in range(3)]
+    server.enemies = [cEnemy.Goomba(random.randint(300, 700)) for i in range(5)] +\
+                     [cEnemy.Turtle(random.randint(300, 700)) for i in range(5)]
     server.itemBlocks = [cBlock.ItemBlock(15 + 6 * 30, 200)]
     server.brickBlocks = [cBlock.BrickBlock(15 + 7 * 30, 200)]
+    server.floorBlocks = [cBlock.FloorBlock(15 + i * 40, 20) for i in range(21)] +\
+                         [cBlock.FloorBlock(15 + i * 40, 60) for i in range(21)]
 
     game_world.add_object(server.background, 0)
     game_world.add_object(server.mario, 1)
     game_world.add_objects(server.enemies, 1)
     game_world.add_objects(server.itemBlocks, 0)
     game_world.add_objects(server.brickBlocks, 0)
+    game_world.add_objects(server.floorBlocks, 0)
 
 
 def exit():
@@ -36,6 +39,8 @@ def exit():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
+
+    collision.collide_update()
 
     for enemy in server.enemies:
         if enemy.die_frame >= 1:
