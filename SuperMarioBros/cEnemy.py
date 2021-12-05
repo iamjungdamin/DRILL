@@ -44,6 +44,8 @@ class Goomba:
             self.image.clip_draw(int(self.frame) * 59, 0, 32, 32, self.xPos, self.yPos)
         else:
             self.image.clip_draw(2 * 59, 0, 32, 32, self.xPos, self.yPos)
+
+    def draw_bb(self):
         draw_rectangle(*self.get_bb())
 
 
@@ -79,5 +81,7 @@ class Turtle:
                 self.image.clip_composite_draw(int(self.frame) * 59, 0, 32, 48, 0, 'h', self.xPos, self.yPos, 32, 48)
         else:
             self.image.clip_draw(2 * 59, 0, 32, 48, self.xPos, self.yPos)
+
+    def draw_bb(self):
         draw_rectangle(*self.get_bb())
 

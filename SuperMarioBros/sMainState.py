@@ -12,6 +12,7 @@ import cEnemy
 import cBlock
 
 name = "MainState"
+boundingBox = True
 
 
 def enter():
@@ -21,8 +22,8 @@ def enter():
                      [cEnemy.Turtle(random.randint(300, 700)) for i in range(5)]
     server.itemBlocks = [cBlock.ItemBlock(15 + 6 * 30, 200)]
     server.brickBlocks = [cBlock.BrickBlock(15 + 7 * 30, 200)]
-    server.floorBlocks = [cBlock.FloorBlock(15 + i * 40, 20) for i in range(21)] +\
-                         [cBlock.FloorBlock(15 + i * 40, 60) for i in range(21)]
+    server.floorBlocks = [cBlock.FloorBlock(15 + i * 30, 15) for i in range(27)] +\
+                         [cBlock.FloorBlock(15 + i * 30, 45) for i in range(27)]
 
     game_world.add_object(server.background, 0)
     game_world.add_object(server.mario, 1)
@@ -52,16 +53,21 @@ def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
         game_object.draw()
+        if boundingBox:
+            game_object.draw_bb()
     update_canvas()
 
 
 def handle_events():
+    global boundingBox
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_b:
+            boundingBox = not boundingBox
         else:
             server.mario.handle_event(event)
 

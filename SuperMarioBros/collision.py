@@ -34,7 +34,7 @@ def collide_update():
     for block in server.floorBlocks:
         if check_collision(server.mario, block):
             server.mario.fall_speed = 0
-            server.mario.yPos = block.yPos + 20 + 16
+            server.mario.yPos = block.yPos + 15 + 16
 
     for block in server.itemBlocks:
         if check_collision(server.mario, block):

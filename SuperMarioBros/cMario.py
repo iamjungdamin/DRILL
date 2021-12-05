@@ -187,6 +187,7 @@ class Mario:
                                                            self.cx, self.yPos + 16, 32, 64)
         self.image[self.trans].opacify(self.alpha)
 
-        draw_rectangle(*self.get_bb())
         debug_print('V:' + str(self.velocity) + '  D:' + str(self.dir) + ' S:' + str(self.cur_state.__name__))
 
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())

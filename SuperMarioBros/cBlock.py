@@ -31,6 +31,8 @@ class ItemBlock:
 
     def draw(self):
         self.image.clip_draw(int(self.frame) * 56, 0, 30, 30, self.xPos, self.yPos)
+
+    def draw_bb(self):
         draw_rectangle(*self.get_bb(0))
         draw_rectangle(*self.get_bb(1))
 
@@ -57,6 +59,8 @@ class BrickBlock:
 
     def draw(self):
         self.image.draw(self.xPos, self.yPos)
+
+    def draw_bb(self):
         draw_rectangle(*self.get_bb(0))
         draw_rectangle(*self.get_bb(1))
 
@@ -75,10 +79,12 @@ class FloorBlock:
         pass
 
     def get_bb(self, bb_type=0):
-        w, h = 40, 40
+        w, h = 30, 30
         return self.xPos - w / 2, self.yPos - h / 2, self.xPos + w / 2, self.yPos + h / 2
 
     def draw(self):
         self.image.draw(self.xPos, self.yPos)
+
+    def draw_bb(self):
         draw_rectangle(*self.get_bb())
 
