@@ -77,6 +77,7 @@ class RunState:
     def do(mario):
         mario.frame = (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         mario.xPos += mario.velocity * game_framework.frame_time
+        mario.xPos = clamp(0, mario.xPos, 1986)
 
     def draw(mario):
         pass

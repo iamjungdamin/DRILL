@@ -1,5 +1,6 @@
 from pico2d import *
 import game_framework
+import server
 
 
 TIME_PER_ACTION = 1.0
@@ -20,17 +21,18 @@ class ItemBlock:
     def update(self):
         if not self.frame == 3:
             self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3
+        self.cx = self.xPos - server.background.window_left
 
     def get_bb(self, bb_type=0):
         # 0 ground, 1 block
         w, h = 30, 30
         if bb_type == 0:
-            return self.xPos - w / 2, self.yPos, self.xPos + w / 2, self.yPos + h / 2
+            return self.cx - w / 2, self.yPos, self.cx + w / 2, self.yPos + h / 2
         elif bb_type == 1:
-            return self.xPos - w / 2, self.yPos - h / 2, self.xPos + w / 2, self.yPos
+            return self.cx - w / 2, self.yPos - h / 2, self.cx + w / 2, self.yPos
 
     def draw(self):
-        self.image.clip_draw(int(self.frame) * 56, 0, 30, 30, self.xPos, self.yPos)
+        self.image.clip_draw(int(self.frame) * 56, 0, 30, 30, self.cx, self.yPos)
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb(0))
@@ -48,17 +50,17 @@ class BrickBlock:
         self.frame = 0
 
     def update(self):
-        pass
+        self.cx = self.xPos - server.background.window_left
 
     def get_bb(self, bb_type=0):
         w, h = 30, 30
         if bb_type == 0:
-            return self.xPos - w / 2, self.yPos, self.xPos + w / 2, self.yPos + h / 2
+            return self.cx - w / 2, self.yPos, self.cx + w / 2, self.yPos + h / 2
         elif bb_type == 1:
-            return self.xPos - w / 2, self.yPos - h / 2, self.xPos + w / 2, self.yPos
+            return self.cx - w / 2, self.yPos - h / 2, self.cx + w / 2, self.yPos
 
     def draw(self):
-        self.image.draw(self.xPos, self.yPos)
+        self.image.draw(self.cx, self.yPos)
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb(0))
@@ -76,14 +78,14 @@ class FloorBlock:
         self.frame = 0
 
     def update(self):
-        pass
+        self.cx = self.xPos - server.background.window_left
 
     def get_bb(self, bb_type=0):
         w, h = 30, 30
-        return self.xPos - w / 2, self.yPos - h / 2, self.xPos + w / 2, self.yPos + h / 2
+        return self.cx - w / 2, self.yPos - h / 2, self.cx + w / 2, self.yPos + h / 2
 
     def draw(self):
-        self.image.draw(self.xPos, self.yPos)
+        self.image.draw(self.cx, self.yPos)
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
