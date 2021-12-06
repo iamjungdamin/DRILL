@@ -4,3 +4,6 @@ enemies = []
 itemBlocks = []
 brickBlocks = []
 floorBlocks = []
+flag = None
+castle = None
+
