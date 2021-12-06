@@ -97,7 +97,7 @@ class Mario:
             load_image('Image/SmallMario.png'), load_image('Image/BigMario.png'), load_image('Image/FireMario.png')
         ]
         self.xPos = 100
-        self.yPos = 83 + 16
+        self.yPos = 40 + 16
         self.frame = 0
         self.trans = 0  # SMALL, BIG, FIRE
         self.dir = 1
@@ -162,7 +162,7 @@ class Mario:
     def get_bb(self, bb_type=0):
         if self.trans == 0:
             w, h = 26, 32
-            return self.cx- w/2, self.yPos - h/2, self.cx + w/2, self.yPos + h/2
+            return self.cx - w/2, self.yPos - h/2, self.cx + w/2, self.yPos + h/2
         else:
             w, h = 32, 64
             return self.cx - w/2, self.yPos - h/2 + 16, self.cx + w/2, self.yPos + h/2 + 16

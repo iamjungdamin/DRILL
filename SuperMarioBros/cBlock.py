@@ -90,3 +90,10 @@ class FloorBlock:
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
 
+
+def setup():
+    server.itemBlocks = [ItemBlock(15 + 6 * 30, 15 + 30 * 3)]
+    server.brickBlocks = [BrickBlock(15 + 7 * 30, 15 + 30 * 3)]
+    server.floorBlocks = [FloorBlock(15 + i * 30, 15) for i in range(27)] + \
+                         [FloorBlock(15 + i * 30, 45) for i in range(27)]
+

@@ -1,6 +1,7 @@
 from pico2d import *
 import game_framework
 import server
+from random import randint
 
 
 PIXEL_PER_METER = (30.0 / 0.3)  # 30 pixel 30 cm
@@ -88,3 +89,7 @@ class Turtle:
     def draw_bb(self):
         draw_rectangle(*self.get_bb())
 
+
+def setup():
+    server.enemies = [Goomba(randint(400, 800)) for i in range(5)] + \
+                     [Turtle(randint(400, 800)) for i in range(5)]

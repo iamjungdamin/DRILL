@@ -4,8 +4,6 @@ import game_world
 import server
 import collision
 
-import random
-
 import cStage
 import cMario
 import cEnemy
@@ -16,16 +14,10 @@ boundingBox = True
 
 
 def enter():
-    server.background = cStage.Background()
+    cStage.setup()
     server.mario = cMario.Mario()
-    server.enemies = [cEnemy.Goomba(random.randint(400, 800)) for i in range(5)] +\
-                     [cEnemy.Turtle(random.randint(400, 800)) for i in range(5)]
-    server.itemBlocks = [cBlock.ItemBlock(15 + 6 * 30, 200)]
-    server.brickBlocks = [cBlock.BrickBlock(15 + 7 * 30, 200)]
-    server.floorBlocks = [cBlock.FloorBlock(15 + i * 30, 15) for i in range(27)] +\
-                         [cBlock.FloorBlock(15 + i * 30, 45) for i in range(27)]
-    server.flag = cStage.Flag()
-    server.castle = cStage.Castle()
+    cEnemy.setup()
+    cBlock.setup()
 
     game_world.add_object(server.background, 0)
     game_world.add_object(server.mario, 1)
