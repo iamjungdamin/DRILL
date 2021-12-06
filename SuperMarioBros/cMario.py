@@ -2,7 +2,6 @@ from pico2d import *
 import game_framework
 import game_world
 import server
-import collision
 
 
 PIXEL_PER_METER = (30.0 / 0.3)  # 30 pixel 30 cm
@@ -77,7 +76,7 @@ class RunState:
     def do(mario):
         mario.frame = (mario.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4
         mario.xPos += mario.velocity * game_framework.frame_time
-        mario.xPos = clamp(0, mario.xPos, 1986)
+        mario.xPos = clamp(0, mario.xPos, 1980)
 
     def draw(mario):
         pass
@@ -153,7 +152,7 @@ class Mario:
         if self.trans == 2:
             self.frame = 6
         # if self.fall_speed == 0:
-        self.fall_speed = -15
+        self.fall_speed = -18
 
     def attack(self):
         self.frame = 4

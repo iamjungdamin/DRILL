@@ -19,16 +19,15 @@ FRAMES_PER_ACTION = 2
 class Goomba:
     image = None
 
-    def __init__(self, x=700):
+    def __init__(self, x, y=60+16):
         if Goomba.image == None:
             Goomba.image = load_image('Image/Goomba.png')
         self.xPos = x
-        self.yPos = 60 + 16
+        self.yPos = y
         self.frame = 0
         self.dir = -1
         self.state = 0  # IDLE, DIED
         self.die_frame = 0.0
-        self.type = 'enemy'
 
     def update(self):
         if self.state == 0:
@@ -55,11 +54,11 @@ class Goomba:
 class Turtle:
     image = None
 
-    def __init__(self, x=700):
+    def __init__(self, x, y=60+24):
         if Turtle.image == None:
             Turtle.image = load_image('Image/Turtle.png')
         self.xPos = x
-        self.yPos = 60 + 24
+        self.yPos = y
         self.frame = 0
         self.dir = -1
         self.state = 0  # IDLE, DIED
@@ -91,5 +90,5 @@ class Turtle:
 
 
 def setup():
-    server.enemies = [Goomba(randint(400, 800)) for i in range(5)] + \
-                     [Turtle(randint(400, 800)) for i in range(5)]
+    server.enemies = [Goomba(16 + 32 * 15)]
+    server.enemies += [Turtle(16 + 32 * 18)]

@@ -50,8 +50,13 @@ def collide_update():
             server.mario.fall_speed = 0
             server.mario.yPos = block.yPos + 15 + 16
         if check_collision(server.mario, block, 0, 1):
-            server.brickBlocks.remove(block)
-            game_world.remove_object(block)
-            server.mario.fall_speed = 0
+            # server.brickBlocks.remove(block)
+            # game_world.remove_object(block)
+            # server.mario.fall_speed = 0
             server.mario.yPos = block.yPos - 15 - 16
+
+    # mario and flag
+    if check_collision(server.mario, server.flag):
+        print('Stage Clear')
+
 
