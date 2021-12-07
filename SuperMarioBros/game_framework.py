@@ -1,5 +1,6 @@
 import time
 frame_time = 0.0
+import server
 
 
 class GameState:
@@ -51,6 +52,7 @@ def pop_state():
 def quit():
     global running
     running = False
+    del server.background.bgmusic
 
 
 def run(start_state):

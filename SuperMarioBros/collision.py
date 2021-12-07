@@ -1,5 +1,7 @@
+from pico2d import *
 import server
 import game_world
+import cItem
 
 
 def check_collision(o1, o2, index1=0, index2=0):
@@ -41,7 +43,12 @@ def collide_update():
             server.mario.fall_speed = 0
             server.mario.yPos = block.yPos + 15 + 16
         if check_collision(server.mario, block, 0, 1):
-            # self.fall_speed = 0
+            if block.item == 1 and block.frame != 3:
+                server.items += [cItem.Mushroom(block.xPos, block.yPos)]
+                game_world.add_objects(server.items, 1)
+            elif block.item == 2 and block.frame != 3:
+                server.items += [cItem.Flower(block.xPos, block.yPos)]
+                game_world.add_objects(server.items, 1)
             server.mario.yPos = block.yPos - 15 - 16
             block.frame = 3
 
@@ -50,13 +57,36 @@ def collide_update():
             server.mario.fall_speed = 0
             server.mario.yPos = block.yPos + 15 + 16
         if check_collision(server.mario, block, 0, 1):
-            # server.brickBlocks.remove(block)
-            # game_world.remove_object(block)
-            # server.mario.fall_speed = 0
             server.mario.yPos = block.yPos - 15 - 16
 
     # mario and flag
     if check_collision(server.mario, server.flag):
         print('Stage Clear')
 
+    # mushroom and block
+    for block in server.floorBlocks:
+        for mushroom in server.items:
+            if check_collision(mushroom, block):
+                mushroom.fall_speed = 0
+                mushroom.yPos = block.yPos + 15 + 16
+
+    for block in server.itemBlocks:
+        for mushroom in server.items:
+            if check_collision(mushroom, block):
+                mushroom.fall_speed = 0
+                mushroom.yPos = block.yPos + 15 + 16
+
+    for block in server.brickBlocks:
+        for mushroom in server.items:
+            if check_collision(mushroom, block):
+                mushroom.fall_speed = 0
+                mushroom.yPos = block.yPos + 15 + 16
+
+    # mario and item
+    for item in server.items:
+        if check_collision(server.mario, item):
+            if server.mario.trans < item.type:
+                server.mario.trans = item.type
+            server.items.remove(item)
+            game_world.remove_object(item)
 

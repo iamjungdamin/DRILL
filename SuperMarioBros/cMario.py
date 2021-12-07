@@ -111,6 +111,9 @@ class Mario:
         self.cur_state = IdleState
         self.cur_state.enter(self, None)
 
+        self.jump_sound = load_wav('Sound/jump.wav')
+        self.jump_sound.set_volume(16)
+
     def add_event(self, event):
         self.event_que.insert(0, event)
 
@@ -153,6 +156,7 @@ class Mario:
             self.frame = 6
         # if self.fall_speed == 0:
         self.fall_speed = -18
+        self.jump_sound.play()
 
     def attack(self):
         self.frame = 4

@@ -8,6 +8,10 @@ class Background:
         self.canvas_width = get_canvas_width()
         self.window_left = 0
 
+        self.bgmusic = load_music('Sound/Ground.mp3')
+        self.bgmusic.set_volume(32)
+        self.bgmusic.repeat_play()
+
     def update(self):
         self.window_left = clamp(0, int(server.mario.xPos) - self.canvas_width // 2, 1980 - self.canvas_width)
 
@@ -65,4 +69,5 @@ def setup():
     server.background = Background()
     server.flag = Flag()
     server.castle = Castle()
+
 

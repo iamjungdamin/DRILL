@@ -11,12 +11,13 @@ FRAMES_PER_ACTION = 3
 class ItemBlock:
     image = None
 
-    def __init__(self, x, y):
+    def __init__(self, x, y, item=0):
         if ItemBlock.image == None:
             ItemBlock.image = load_image('Image/itemblock.png')
         self.xPos = x
         self.yPos = y
         self.frame = 0
+        self.item = item    # 0 none, 1 mushroom, 2 flower
 
     def update(self):
         if not self.frame == 3:
@@ -92,13 +93,13 @@ class FloorBlock:
 
 
 def setup():
-    server.itemBlocks = [ItemBlock(15 + 30 * 10, 15 + 30 * 6),
-                         ItemBlock(15 + 30 * 15, 15 + 30 * 6),
-                         ItemBlock(15 + 30 * 16, 15 + 30 * 10),
-                         ItemBlock(15 + 30 * 17, 15 + 30 * 6)]
-    server.brickBlocks = [BrickBlock(15 + 30 * 14, 15 + 30 * 6),
-                          BrickBlock(15 + 30 * 16, 15 + 30 * 6),
-                          BrickBlock(15 + 30 * 18, 15 + 30 * 6)]
+    server.itemBlocks = [ItemBlock(15 + 30 * 7, 15 + 30 * 6, 1),
+                         ItemBlock(15 + 30 * 12, 15 + 30 * 6),
+                         ItemBlock(15 + 30 * 13, 15 + 30 * 10, 2),
+                         ItemBlock(15 + 30 * 14, 15 + 30 * 6)]
+    server.brickBlocks = [BrickBlock(15 + 30 * 11, 15 + 30 * 6),
+                          BrickBlock(15 + 30 * 13, 15 + 30 * 6),
+                          BrickBlock(15 + 30 * 15, 15 + 30 * 6)]
     server.floorBlocks = [FloorBlock(15 + 30 * i, 15) for i in range(66)] + \
                          [FloorBlock(15 + 30 * i, 45) for i in range(66)]
 
