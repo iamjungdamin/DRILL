@@ -1,5 +1,6 @@
 from pico2d import *
 import server
+import game_framework
 
 
 class Background:
@@ -10,7 +11,9 @@ class Background:
 
         self.bgmusic = load_music('Sound/Ground.mp3')
         self.bgmusic.set_volume(32)
-        self.bgmusic.repeat_play()
+        # self.bgmusic.repeat_play()
+
+        self.font = load_font('Font/emulogic.ttf', 18)
 
     def update(self):
         self.window_left = clamp(0, int(server.mario.xPos) - self.canvas_width // 2, 1980 - self.canvas_width)
@@ -21,6 +24,8 @@ class Background:
 
     def draw(self):
         self.image.clip_draw_to_origin(self.window_left, 0, 800, 600, 0, 0)
+        self.font.draw(600, 570, 'time', (255, 255, 255))
+        self.font.draw(610, 550, '%03d' % server.game_time, (255, 255, 255))
 
     def draw_bb(self):
         # draw_rectangle(*self.get_bb())

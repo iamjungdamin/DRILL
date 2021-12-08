@@ -92,6 +92,40 @@ class FloorBlock:
         draw_rectangle(*self.get_bb())
 
 
+class Pipe:
+    image = None
+
+    def __init__(self, x, y=60+48):
+        if Pipe.image == None:
+            Pipe.image = load_image('Image/Pipe.png')
+        self.xPos = x
+        self.yPos = y
+        self.frame = 0
+
+    def update(self):
+        self.cx = self.xPos - server.background.window_left
+
+    def get_bb(self, bb_type=0):
+        # 0 ground, 1 left, 2 right
+        if bb_type == 0:
+            w, h = 64, 30
+            return self.cx - w / 2, self.yPos + 18, self.cx + w / 2, self.yPos + 48
+        elif bb_type == 1:
+            w, h = 28, 66
+            return self.cx - w, self.yPos - h/2 - 18, self.cx, self.yPos + h/2 - 18
+        elif bb_type == 2:
+            w, h = 28, 66
+            return self.cx, self.yPos - h/2 - 18, self.cx + w, self.yPos + h/2 - 18
+
+    def draw(self):
+        self.image.draw(self.cx, self.yPos)
+
+    def draw_bb(self):
+        draw_rectangle(*self.get_bb())
+        draw_rectangle(*self.get_bb(1))
+        draw_rectangle(*self.get_bb(2))
+
+
 def setup():
     server.itemBlocks = [ItemBlock(15 + 30 * 7, 15 + 30 * 6, 1),
                          ItemBlock(15 + 30 * 12, 15 + 30 * 6),
@@ -100,6 +134,13 @@ def setup():
     server.brickBlocks = [BrickBlock(15 + 30 * 11, 15 + 30 * 6),
                           BrickBlock(15 + 30 * 13, 15 + 30 * 6),
                           BrickBlock(15 + 30 * 15, 15 + 30 * 6)]
-    server.floorBlocks = [FloorBlock(15 + 30 * i, 15) for i in range(66)] + \
-                         [FloorBlock(15 + 30 * i, 45) for i in range(66)]
+    server.floorBlocks = [FloorBlock(15 + 30 * i, 15) for i in range(0, 20)] + \
+                         [FloorBlock(15 + 30 * i, 15) for i in range(23, 38)] + \
+                         [FloorBlock(15 + 30 * i, 15) for i in range(41, 66)] + \
+                         [FloorBlock(15 + 30 * i, 45) for i in range(0, 20)] + \
+                         [FloorBlock(15 + 30 * i, 45) for i in range(23, 38)] + \
+                         [FloorBlock(15 + 30 * i, 45) for i in range(41, 66)]
+    server.pipes = [Pipe(30 * 25),
+                    Pipe(30 * 36),
+                    Pipe(30 * 43)]
 

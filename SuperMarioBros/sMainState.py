@@ -25,6 +25,7 @@ def enter():
     game_world.add_objects(server.itemBlocks, 0)
     game_world.add_objects(server.brickBlocks, 0)
     game_world.add_objects(server.floorBlocks, 0)
+    game_world.add_objects(server.pipes, 0)
     game_world.add_object(server.flag, 0)
     game_world.add_object(server.castle, 0)
 
@@ -37,7 +38,14 @@ def update():
     for game_object in game_world.all_objects():
         game_object.update()
 
+    server.game_time -= game_framework.frame_time
     collision.collide_update()
+
+    if server.mario.check_win():
+        pass
+    else:
+        pass
+        # server.mario.die_sound.play()
 
     for enemy in server.enemies:
         if enemy.die_frame >= 1:

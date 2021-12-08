@@ -5,7 +5,7 @@ import server
 
 
 PIXEL_PER_METER = (30.0 / 0.3)  # 30 pixel 30 cm
-RUN_SPEED_KMPH = 3.0
+RUN_SPEED_KMPH = 4.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -113,6 +113,12 @@ class Mario:
 
         self.jump_sound = load_wav('Sound/jump.wav')
         self.jump_sound.set_volume(16)
+        self.stomp_sound = load_wav('Sound/stomp.wav')
+        self.stomp_sound.set_volume(64)
+        self.bebig_sound = load_wav('Sound/bebig.wav')
+        self.bebig_sound.set_volume(16)
+        self.die_sound = load_wav('Sound/die.wav')
+        self.die_sound.set_volume(16)
 
     def add_event(self, event):
         self.event_que.insert(0, event)
@@ -150,20 +156,31 @@ class Mario:
         else:
             self.alpha = 1.0
 
-    def jump(self):
+    def check_win(self):
+        if self.trans == -1:
+            print('game over')
+            return False
+        elif self.yPos < -100:
+            print('game over')
+            return False
+
+    def jump(self, s=0):
         self.frame = 5
         if self.trans == 2:
             self.frame = 6
         # if self.fall_speed == 0:
         self.fall_speed = -18
-        self.jump_sound.play()
+        if s == 0:
+            self.jump_sound.play()
+        else:
+            self.stomp_sound.play()
 
     def attack(self):
         self.frame = 4
         # TODO: 파이어볼
 
     def get_bb(self, bb_type=0):
-        if self.trans == 0:
+        if self.trans == -1 or self.trans == 0:
             w, h = 26, 32
             return self.cx - w/2, self.yPos - h/2, self.cx + w/2, self.yPos + h/2
         else:
@@ -173,15 +190,15 @@ class Mario:
     def draw(self):
         # self.cur_state.draw(self)
         if self.dir == 1:
-            if self.trans == 0:
-                self.image[self.trans].clip_draw(420 + int(self.frame) * 60, 0, 26, 32, self.cx, self.yPos)
+            if self.trans == -1 or self.trans == 0:
+                self.image[0].clip_draw(420 + int(self.frame) * 60, 0, 26, 32, self.cx, self.yPos)
             elif self.trans == 1:
                 self.image[self.trans].clip_draw(416 + int(self.frame) * 60, 0, 32, 64, self.cx, self.yPos + 16)
             elif self.trans == 2:
                 self.image[self.trans].clip_draw(416 + int(self.frame) * 51, 0, 32, 64, self.cx, self.yPos + 16)
         else:
-            if self.trans == 0:
-                self.image[self.trans].clip_composite_draw(420 + int(self.frame) * 60, 0, 26, 32, 0, 'h',
+            if self.trans == -1 or self.trans == 0:
+                self.image[0].clip_composite_draw(420 + int(self.frame) * 60, 0, 26, 32, 0, 'h',
                                                            self.cx, self.yPos, 26, 32)
             elif self.trans == 1:
                 self.image[self.trans].clip_composite_draw(416 + int(self.frame) * 60, 0, 32, 64, 0, 'h',
@@ -190,8 +207,7 @@ class Mario:
                 self.image[self.trans].clip_composite_draw(416 + int(self.frame) * 51, 0, 32, 64, 0, 'h',
                                                            self.cx, self.yPos + 16, 32, 64)
         self.image[self.trans].opacify(self.alpha)
-
-        debug_print('V:' + str(self.velocity) + '  D:' + str(self.dir) + ' S:' + str(self.cur_state.__name__))
+        # debug_print('V:' + str(self.velocity) + ' D:' + str(self.dir) + ' S:' + str(self.cur_state.__name__))
 
     def draw_bb(self):
         draw_rectangle(*self.get_bb())

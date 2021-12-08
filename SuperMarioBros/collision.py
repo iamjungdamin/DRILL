@@ -22,13 +22,10 @@ def collide_update():
         if check_collision(server.mario, enemy) and enemy.state == 0:
             if server.mario.yPos > enemy.yPos:
                 enemy.state = 1
-                server.mario.jump()
+                server.mario.jump(1)
             else:
                 if server.mario.trans >= 0 and not server.mario.invincibility:
                     server.mario.trans -= 1
-                    if server.mario.trans < 0:
-                        print('Game Over')
-                        pass
                     server.mario.invincibility = True
                     break
 
@@ -42,7 +39,7 @@ def collide_update():
         if check_collision(server.mario, block):
             server.mario.fall_speed = 0
             server.mario.yPos = block.yPos + 15 + 16
-        if check_collision(server.mario, block, 0, 1):
+        elif check_collision(server.mario, block, 0, 1):
             if block.item == 1 and block.frame != 3:
                 server.items += [cItem.Mushroom(block.xPos, block.yPos)]
                 game_world.add_objects(server.items, 1)
@@ -56,8 +53,26 @@ def collide_update():
         if check_collision(server.mario, block):
             server.mario.fall_speed = 0
             server.mario.yPos = block.yPos + 15 + 16
-        if check_collision(server.mario, block, 0, 1):
+        elif check_collision(server.mario, block, 0, 1):
             server.mario.yPos = block.yPos - 15 - 16
+
+    # mario and pipe
+    for pipe in server.pipes:
+        if check_collision(server.mario, pipe):
+            server.mario.fall_speed = 0
+            server.mario.yPos = pipe.yPos + 48 + 16
+        elif check_collision(server.mario, pipe, 0, 1):
+            server.mario.xPos = pipe.xPos - 28 - 13
+        elif check_collision(server.mario, pipe, 0, 2):
+            server.mario.xPos = pipe.xPos + 28 + 13
+
+    # enemy and pipe
+    for enemy in server.enemies:
+        for pipe in server.pipes:
+            if check_collision(enemy, pipe, 0, 1):
+                enemy.dir *= -1
+            elif check_collision(enemy, pipe, 0, 2):
+                enemy.dir *= -1
 
     # mario and flag
     if check_collision(server.mario, server.flag):
@@ -87,6 +102,7 @@ def collide_update():
         if check_collision(server.mario, item):
             if server.mario.trans < item.type:
                 server.mario.trans = item.type
+                server.mario.bebig_sound.play()
             server.items.remove(item)
             game_world.remove_object(item)
 
