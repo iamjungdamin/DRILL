@@ -5,7 +5,7 @@ import server
 
 
 PIXEL_PER_METER = (30.0 / 0.3)  # 30 pixel 30 cm
-RUN_SPEED_KMPH = 4.0
+RUN_SPEED_KMPH = 5.0
 RUN_SPEED_MPM = (RUN_SPEED_KMPH * 1000.0 / 60.0)
 RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
 RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
@@ -117,6 +117,12 @@ class Mario:
         self.stomp_sound.set_volume(64)
         self.bebig_sound = load_wav('Sound/bebig.wav')
         self.bebig_sound.set_volume(16)
+        self.hit_sound = load_wav('Sound/hit.wav')
+        self.hit_sound.set_volume(16)
+        self.block_sound = load_wav('Sound/block.wav')
+        self.block_sound.set_volume(32)
+        self.clear_sound = load_wav('Sound/clear.wav')
+        self.clear_sound.set_volume(16)
         self.die_sound = load_wav('Sound/die.wav')
         self.die_sound.set_volume(16)
 
@@ -131,8 +137,9 @@ class Mario:
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_2):
             self.trans = 2
         elif (event.type, event.key) in key_event_table:
-            key_event = key_event_table[(event.type, event.key)]
-            self.add_event(key_event)
+            if server.gaming:
+                key_event = key_event_table[(event.type, event.key)]
+                self.add_event(key_event)
 
     def update(self):
         self.cur_state.do(self)
@@ -156,13 +163,14 @@ class Mario:
         else:
             self.alpha = 1.0
 
-    def check_win(self):
+    def check_die(self):
         if self.trans == -1:
-            print('game over')
-            return False
+            self.velocity = 0
+            self.frame = 6
+            return True
         elif self.yPos < -100:
-            print('game over')
-            return False
+            self.velocity = 0
+            return True
 
     def jump(self, s=0):
         self.frame = 5

@@ -96,3 +96,14 @@ def setup():
                       Goomba(16 + 32 * 49)]
     server.enemies += [Turtle(16 + 32 * 18),
                        Turtle(16 + 32 * 31)]
+
+
+def setup2():
+    server.enemies = [Goomba(16 + 32 * 15),
+                      Goomba(16 + 32 * 17),
+                      Goomba(16 + 32 * 28),
+                      Goomba(16 + 32 * 45),
+                      Goomba(16 + 32 * 49)]
+    server.enemies += [Turtle(16 + 32 * 18),
+                       Turtle(16 + 32 * 30),
+                       Turtle(16 + 32 * 31)]

@@ -10,15 +10,15 @@ import cMario
 import cEnemy
 import cBlock
 
-name = "MainState"
+name = "MainState2"
 boundingBox = True
 
 
 def enter():
     cStage.setup()
     server.mario = cMario.Mario()
-    cEnemy.setup()
-    cBlock.setup()
+    cEnemy.setup2()
+    cBlock.setup2()
 
     game_world.add_object(server.background, 0)
     game_world.add_object(server.mario, 2)

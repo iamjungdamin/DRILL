@@ -26,6 +26,8 @@ def collide_update():
             else:
                 if server.mario.trans >= 0 and not server.mario.invincibility:
                     server.mario.trans -= 1
+                    if server.mario.trans == 0 or server.mario.trans == 1:
+                        server.mario.hit_sound.play()
                     server.mario.invincibility = True
                     break
 
@@ -43,9 +45,11 @@ def collide_update():
             if block.item == 1 and block.frame != 3:
                 server.items += [cItem.Mushroom(block.xPos, block.yPos)]
                 game_world.add_objects(server.items, 1)
+                server.mario.block_sound.play()
             elif block.item == 2 and block.frame != 3:
                 server.items += [cItem.Flower(block.xPos, block.yPos)]
                 game_world.add_objects(server.items, 1)
+                server.mario.block_sound.play()
             server.mario.yPos = block.yPos - 15 - 16
             block.frame = 3
 
@@ -74,10 +78,6 @@ def collide_update():
             elif check_collision(enemy, pipe, 0, 2):
                 enemy.dir *= -1
 
-    # mario and flag
-    if check_collision(server.mario, server.flag):
-        print('Stage Clear')
-
     # mushroom and block
     for block in server.floorBlocks:
         for mushroom in server.items:
@@ -105,4 +105,15 @@ def collide_update():
                 server.mario.bebig_sound.play()
             server.items.remove(item)
             game_world.remove_object(item)
+
+    # mario and castle
+    if check_collision(server.mario, server.castle):
+        server.mario.trans = -2  # 안보이게
+
+
+def check_win():
+    # mario and flag
+    if check_collision(server.mario, server.flag):
+        # server.gaming = False
+        return True
 

@@ -144,3 +144,22 @@ def setup():
                     Pipe(30 * 36),
                     Pipe(30 * 43)]
 
+
+def setup2():
+    server.itemBlocks = [ItemBlock(15 + 30 * 13, 15 + 30 * 6),
+                         ItemBlock(15 + 30 * 14, 15 + 30 * 6),
+                         ItemBlock(15 + 30 * 15, 15 + 30 * 6),
+                         ItemBlock(15 + 30 * 30, 15 + 30 * 10, 2)]
+    server.brickBlocks = [BrickBlock(15 + 30 * 29, 15 + 30 * 6),
+                          BrickBlock(15 + 30 * 30, 15 + 30 * 6),
+                          BrickBlock(15 + 30 * 31, 15 + 30 * 6)]
+    server.floorBlocks = [FloorBlock(15 + 30 * i, 15) for i in range(0, 20)] + \
+                         [FloorBlock(15 + 30 * i, 15) for i in range(23, 38)] + \
+                         [FloorBlock(15 + 30 * i, 15) for i in range(38, 66)] + \
+                         [FloorBlock(15 + 30 * i, 45) for i in range(0, 20)] + \
+                         [FloorBlock(15 + 30 * i, 45) for i in range(23, 38)] + \
+                         [FloorBlock(15 + 30 * i, 45) for i in range(38, 66)]
+    server.pipes = [Pipe(30 * 25),
+                    Pipe(30 * 36),
+                    Pipe(30 * 43)]
+
