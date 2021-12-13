@@ -10,8 +10,8 @@ class Background:
         self.window_left = 0
 
         self.bgmusic = load_music('Sound/Ground.mp3')
-        self.bgmusic.set_volume(32)
-        # self.bgmusic.repeat_play()
+        self.bgmusic.set_volume(16)
+        self.bgmusic.repeat_play()
 
         self.font = load_font('Font/emulogic.ttf', 18)
 

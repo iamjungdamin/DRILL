@@ -11,7 +11,7 @@ import cEnemy
 import cBlock
 
 name = "MainState2"
-boundingBox = True
+boundingBox = False
 
 
 def enter():
@@ -46,10 +46,12 @@ def update():
     if collision.check_win():
         if server.gaming:
             server.gaming = False
+            server.background.bgmusic.stop()
             server.mario.clear_sound.play()
     if server.mario.check_die():
         if server.gaming:
             server.gaming = False
+            server.background.bgmusic.stop()
             server.mario.die_sound.play()
 
     if not server.gaming:
