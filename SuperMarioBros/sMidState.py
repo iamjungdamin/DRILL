@@ -1,5 +1,6 @@
 import game_framework
 from pico2d import *
+import sMainState
 import sMainState2
 import server
 
@@ -51,7 +52,10 @@ def handle_events():
             if event.key == SDLK_ESCAPE:
                 game_framework.quit()
             if event.key == SDLK_SPACE:
-                game_framework.change_state(sMainState2)
+                if server.cur_stage == 1:
+                    game_framework.change_state(sMainState)
+                elif server.cur_stage == 2:
+                    game_framework.change_state(sMainState2)
 
 
 def pause(): pass

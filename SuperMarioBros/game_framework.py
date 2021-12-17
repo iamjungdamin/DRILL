@@ -52,7 +52,8 @@ def pop_state():
 def quit():
     global running
     running = False
-    del server.background.bgmusic
+    if server.background:
+        del server.background.bgmusic
 
 
 def run(start_state):

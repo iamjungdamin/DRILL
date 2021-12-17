@@ -11,7 +11,6 @@ import cEnemy
 import cBlock
 
 name = "MainState2"
-boundingBox = False
 
 
 def enter():
@@ -46,6 +45,7 @@ def update():
     if collision.check_win():
         if server.gaming:
             server.gaming = False
+            server.cur_stage += 1
             server.background.bgmusic.stop()
             server.mario.clear_sound.play()
     if server.mario.check_die():
@@ -69,13 +69,12 @@ def draw():
     clear_canvas()
     for game_object in game_world.all_objects():
         game_object.draw()
-        if boundingBox:
+        if server.boundingBox:
             game_object.draw_bb()
     update_canvas()
 
 
 def handle_events():
-    global boundingBox
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -83,7 +82,7 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_b:
-            boundingBox = not boundingBox
+            server.boundingBox = not server.boundingBox
         else:
             server.mario.handle_event(event)
 
