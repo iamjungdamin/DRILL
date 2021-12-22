@@ -55,8 +55,8 @@ def update():
             server.mario.die_sound.play()
 
     if not server.gaming:
-        server.waiting += game_framework.frame_time
-        if server.waiting > 5:
+        server.wait_time += game_framework.frame_time
+        if server.wait_time > 5:
             game_framework.change_state(sMidState)
 
     for enemy in server.enemies:

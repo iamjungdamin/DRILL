@@ -171,6 +171,11 @@ class Mario:
         elif self.yPos < -100:
             self.velocity = 0
             return True
+        elif server.game_time < 0:
+            self.velocity = 0
+            self.trans = 0
+            self.frame = 6
+            return True
 
     def jump(self, s=0):
         self.frame = 5

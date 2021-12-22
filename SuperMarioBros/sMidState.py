@@ -11,21 +11,7 @@ title = None
 def enter():
     global title
     title = load_image('Image/Mid.png')
-
-    server.background = None
-    server.mario = None
-    server.enemies = []
-    server.itemBlocks = []
-    server.brickBlocks = []
-    server.floorBlocks = []
-    server.items = []
-    server.pipes = []
-    server.flag = None
-    server.castle = None
-
-    server.game_time = 150
-    server.gaming = True
-    server.waiting = 0
+    server.init_game()
 
 
 def exit():
